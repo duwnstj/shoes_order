@@ -1,0 +1,5 @@
+rootProject.name = 'shoes-order'
+
+include 'module-common'
+include 'module-user'
+
