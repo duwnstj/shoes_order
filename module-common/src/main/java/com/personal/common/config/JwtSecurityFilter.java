@@ -18,7 +18,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Slf4j(topic = "JwtTokenFilter")
+import static com.personal.common.constants.Const.*;
+
+@Slf4j(topic = "JwtSecurityFilter")
 @RequiredArgsConstructor
 @Component
 public class JwtSecurityFilter extends OncePerRequestFilter {
@@ -45,7 +47,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
 
                 if (!jwtUtil.validateToken(token , type)) {
                     log.error("인증 실패");
-                    response.setContentType("application/json");
+                    response.setContentType(CONTENT_TYPE_JSON);
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED , "인증에 실패했습니다.");
                     return;
                 } else {
@@ -53,8 +55,8 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
                     Claims claims = jwtUtil.getUserInfoFromToken(token , type);
 
                     Long userId = Long.parseLong(claims.getSubject());
-                    String email = claims.get("email", String.class);
-                    UserRole userRole = UserRole.of(claims.get("userRole", String.class));
+                    String email = claims.get(USER_EMAIL, String.class);
+                    UserRole userRole = UserRole.of(claims.get(USER_ROLE, String.class));
 
                     if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                         AuthUser authUser = new AuthUser(userId, email, userRole);
@@ -67,7 +69,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
                 }
             } else {
                 log.error("토큰이 없습니다.");
-                response.setContentType("application/json");
+                response.setContentType(CONTENT_TYPE_JSON);
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST , "토큰이 없습니다.");
                 return;
             }
@@ -77,7 +79,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
     }
 
     private boolean validateNotPublicUrl(String url) {
-        return !(url.equals("/users/register") || url.equals("/users/login") || url.startsWith("/pubsub"));
+        return !(url.equals("/api/v1/users/register") || url.equals("/api/v1/users/login"));
     }
 
     private boolean validateRefreshTokenUrl(String url) {

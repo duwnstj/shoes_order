@@ -1,5 +1,6 @@
 package com.personal.common.config;
 
+import com.personal.common.enums.TokenType;
 import com.personal.common.enums.UserRole;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.*;
@@ -15,6 +16,8 @@ import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.Date;
 
+import static com.personal.common.constants.Const.*;
+
 @RequiredArgsConstructor
 @Component
 public class JwtUtil {
@@ -26,21 +29,15 @@ public class JwtUtil {
     public static final String BEARER_PREFIX = "Bearer ";
 
     private SecretKey accessKey;
-
-    private final long TOKEN_ACCESS_TIME = 60 * 60 * 24 * 1000L;
-
     private SecretKey refreshKey;
-
-    private final long TOKEN_REFRESH_TIME = 60 * 60 * 24 * 1000L;
-
 
     // 로그 설정
     public static final Logger logger = LoggerFactory.getLogger("JWT 관련 로그");
 
     @PostConstruct
     public void init() {
-        accessKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(dotenv.get("JWT_SECRET_ACCESS_TOKEN")));
-        refreshKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(dotenv.get("JWT_SECRET_REFRESH_TOKEN")));
+        accessKey = getSecretKeyFromBase64(dotenv.get("JWT_SECRET_ACCESS_TOKEN"));
+        refreshKey = getSecretKeyFromBase64(dotenv.get("JWT_SECRET_REFRESH_TOKEN"));
     }
 
     // 토큰 생성
@@ -48,13 +45,13 @@ public class JwtUtil {
         Date date = new Date();
 
         SecretKey secretKey = type.equals(ACCESS) ? accessKey : refreshKey;
-        long time = type.equals(ACCESS) ? TOKEN_ACCESS_TIME : TOKEN_REFRESH_TIME;
+        long time = type.equals(ACCESS) ? TokenType.ACCESS.getLifeTime() : TokenType.REFRESH.getLifeTime();
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .subject(String.valueOf(userId))
-                        .claim("email" , email)
-                        .claim("userRole", userRole)
+                        .claim(USER_EMAIL , email)
+                        .claim(USER_ROLE, userRole)
                         .expiration(new Date(date.getTime() + time))
                         .issuedAt(date)
                         .signWith(secretKey)
@@ -82,8 +79,7 @@ public class JwtUtil {
     // JWT 토큰 substring
     public String substringToken(String tokenValue) {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
-            // "Bearer "이 공백을 포함하여 7자를 자른다.
-            return tokenValue.substring(7);
+            return tokenValue.substring(BEARER_PREFIX.length());
         }
         logger.error("Not Found Token");
         throw new NullPointerException("Not Found Token");
@@ -98,5 +94,9 @@ public class JwtUtil {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    private SecretKey getSecretKeyFromBase64(String token) {
+        return Keys.hmacShaKeyFor(Base64.getDecoder().decode(token));
     }
 }
