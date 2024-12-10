@@ -1,5 +1,6 @@
-package com.personal.entity;
+package com.personal.user.entity;
 
+import com.personal.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 

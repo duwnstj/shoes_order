@@ -1,4 +1,4 @@
-package com.personal;
+package com.personal.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
