@@ -83,6 +83,6 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
     }
 
     private boolean validateRefreshTokenUrl(String url) {
-        return url.equals("/users/refresh-token");
+        return url.equals("/api/v1/users/refresh-token");
     }
 }
