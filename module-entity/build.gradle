@@ -4,6 +4,4 @@ jar.enabled = true
 
 dependencies {
     implementation project(':module-common')
-    implementation project(':module-entity')
-    runtimeOnly 'com.mysql:mysql-connector-j'
 }
