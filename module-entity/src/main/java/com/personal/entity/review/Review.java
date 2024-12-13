@@ -1,7 +1,7 @@
 package com.personal.entity.review;
 
 import com.personal.common.entity.BaseEntity;
-import com.personal.entity.order.Order;
+import com.personal.entity.order.Orders;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +26,6 @@ public class Review extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    private Orders orders;
 
 }

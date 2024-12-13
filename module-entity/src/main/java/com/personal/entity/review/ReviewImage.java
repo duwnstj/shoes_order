@@ -1,6 +1,5 @@
-package com.personal.entity.reviewimage;
+package com.personal.entity.review;
 
-import com.personal.entity.review.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

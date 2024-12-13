@@ -1,6 +1,7 @@
 package com.personal.entity.ship;
 
-import com.personal.entity.order.Order;
+import com.personal.common.entity.BaseEntity;
+import com.personal.entity.order.Orders;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 @Entity
 @NoArgsConstructor
 @Table(name = "shipping_status")
-public class ShippingStatus {
+public class ShippingStatus extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,5 +37,5 @@ public class ShippingStatus {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    private Orders orders;
 }

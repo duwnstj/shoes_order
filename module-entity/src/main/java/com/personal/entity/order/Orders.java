@@ -10,8 +10,8 @@ import java.time.LocalDate;
 
 @Getter
 @Entity
-@Table(name = "order")
-public class Order extends BaseEntity {
+@Table(name = "orders")
+public class Orders extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +23,7 @@ public class Order extends BaseEntity {
     private LocalDate orderDate;
 
     @Column(nullable = false)
-    private String recepi;
+    private String recipi;
 
     @Column(nullable = false)
     private String tel;
@@ -32,6 +32,7 @@ public class Order extends BaseEntity {
     private String request;
 
     @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private OrderStatus orderStatus;
 
     @Column(nullable = false)
@@ -59,6 +60,4 @@ public class Order extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
-
-
 }
