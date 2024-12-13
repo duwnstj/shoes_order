@@ -31,6 +31,8 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String url = request.getRequestURI();
 
+        log.info("url : {}" , url);
+
         if (Strings.isNotBlank(url) && validateNotPublicUrl(url)) {
             // 나머지 API 요청은 인증 처리 진행
             // 토큰 확인
@@ -79,7 +81,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
     }
 
     private boolean validateNotPublicUrl(String url) {
-        return !(url.equals("/api/v1/users/register") || url.equals("/api/v1/users/login"));
+        return !(url.equals("/api/v1/users/register") || url.equals("/api/v1/users/login") || url.startsWith("/test"));
     }
 
     private boolean validateRefreshTokenUrl(String url) {

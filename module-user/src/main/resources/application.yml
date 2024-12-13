@@ -21,3 +21,10 @@ spring:
         use_sql_comments: true
 server:
   port: 8080
+
+jwt:
+  secret:
+    access:
+      key: ${JWT_SECRET_ACCESS_TOKEN}
+    refresh:
+      key: ${JWT_SECRET_REFRESH_TOKEN}

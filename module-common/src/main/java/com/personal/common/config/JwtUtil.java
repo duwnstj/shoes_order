@@ -2,13 +2,12 @@ package com.personal.common.config;
 
 import com.personal.common.enums.TokenType;
 import com.personal.common.enums.UserRole;
-import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -16,28 +15,30 @@ import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.Date;
 
-import static com.personal.common.constants.Const.*;
+import static com.personal.common.constants.Const.USER_EMAIL;
+import static com.personal.common.constants.Const.USER_ROLE;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtUtil {
-    private final Dotenv dotenv;
-
     public static final String ACCESS = "ACCESS";
     public static final String REFRESH = "REFRESH";
 
     public static final String BEARER_PREFIX = "Bearer ";
 
+    @Value("${jwt.secret.access.key}")
+    private String accessToken;
     private SecretKey accessKey;
-    private SecretKey refreshKey;
 
-    // 로그 설정
-    public static final Logger logger = LoggerFactory.getLogger("JWT 관련 로그");
+    @Value("${jwt.secret.refresh.key}")
+    private String refreshToken;
+    private SecretKey refreshKey;
 
     @PostConstruct
     public void init() {
-        accessKey = getSecretKeyFromBase64(dotenv.get("JWT_SECRET_ACCESS_TOKEN"));
-        refreshKey = getSecretKeyFromBase64(dotenv.get("JWT_SECRET_REFRESH_TOKEN"));
+        accessKey = getSecretKeyFromBase64(accessToken);
+        refreshKey = getSecretKeyFromBase64(refreshToken);
     }
 
     // 토큰 생성
@@ -65,13 +66,13 @@ public class JwtUtil {
             Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
             return true; // 유효한 토큰
         } catch (SecurityException | MalformedJwtException e) {
-            logger.error("잘못된 JWT 서명입니다.");
+            log.error("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
-            logger.error("만료된 JWT 토큰입니다.");
+            log.error("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
-            logger.error("지원되지 않는 JWT 토큰입니다.");
+            log.error("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
-            logger.error("JWT 토큰이 잘못되었습니다.");
+            log.error("JWT 토큰이 잘못되었습니다.");
         }
         return false; // 유효하지 않은 토큰
     }
@@ -81,7 +82,7 @@ public class JwtUtil {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(BEARER_PREFIX.length());
         }
-        logger.error("Not Found Token");
+        log.error("Not Found Token");
         throw new NullPointerException("Not Found Token");
     }
 

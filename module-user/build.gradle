@@ -4,12 +4,4 @@ jar.enabled = true
 
 dependencies {
     implementation project(':module-common')
-    runtimeOnly 'com.mysql:mysql-connector-j'
-
-    processResources {
-        from(project(':module-common').sourceSets.main.resources) {
-            include '.env'
-            into 'src/main/resources'
-        }
-    }
 }
