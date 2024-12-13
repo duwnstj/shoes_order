@@ -18,6 +18,7 @@ public class ShippingStatus extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private ShipStatus shippingStatus;
 
     @Column(nullable = false)
