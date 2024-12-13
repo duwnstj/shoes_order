@@ -33,12 +33,10 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
 
         log.info("url : {}" , url);
 
-        if (Strings.isNotBlank(url) && validateNotPublicUrl(url)) {
-            // 나머지 API 요청은 인증 처리 진행
-            // 토큰 확인
+        if (Strings.isNotBlank(url)) {
             String tokenValue = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-            if (Strings.isNotBlank(tokenValue)) { // 토큰이 존재하면 검증 시작
+            if (Strings.isNotBlank(tokenValue) && tokenValue.startsWith(JwtUtil.BEARER_PREFIX)) {
                 // 토큰 검증
                 String token = jwtUtil.substringToken(tokenValue);
 
@@ -49,18 +47,18 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
 
                 if (!jwtUtil.validateToken(token , type)) {
                     log.error("인증 실패");
-                    response.setContentType(CONTENT_TYPE_JSON);
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED , "인증에 실패했습니다.");
+                    response.setContentType("application/json");
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증에 실패했습니다.");
                     return;
                 } else {
-                    log.info("토큰 검증 성공");
+                    log.debug("토큰 검증 성공");
                     Claims claims = jwtUtil.getUserInfoFromToken(token , type);
 
                     Long userId = Long.parseLong(claims.getSubject());
                     String email = claims.get(USER_EMAIL, String.class);
                     UserRole userRole = UserRole.of(claims.get(USER_ROLE, String.class));
 
-                    if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    if (SecurityContextHolder.getContext().getAuthentication() == null) {
                         AuthUser authUser = new AuthUser(userId, email, userRole);
 
                         JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(authUser);
@@ -69,22 +67,12 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
                     }
 
                 }
-            } else {
-                log.error("토큰이 없습니다.");
-                response.setContentType(CONTENT_TYPE_JSON);
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST , "토큰이 없습니다.");
-                return;
             }
         }
-
         filterChain.doFilter(request, response);
     }
 
-    private boolean validateNotPublicUrl(String url) {
-        return !(url.equals("/api/v1/users/register") || url.equals("/api/v1/users/login") || url.startsWith("/test"));
-    }
-
     private boolean validateRefreshTokenUrl(String url) {
-        return url.equals("/api/v1/users/refresh-token");
+        return url != null && url.contains("refresh-token");
     }
 }
