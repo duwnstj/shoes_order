@@ -32,9 +32,9 @@ public class User extends BaseEntity {
     private boolean isDeleted = false;
 
     @Builder
-    public User(String password, String email, String name, UserRole role) {
-        this.password = password;
+    public User(String email, String password, String name, UserRole role) {
         this.email = email;
+        this.password = password;
         this.name = name;
         this.role = role;
     }
