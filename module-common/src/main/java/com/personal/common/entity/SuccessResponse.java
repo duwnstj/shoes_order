@@ -1,5 +1,6 @@
 package com.personal.common.entity;
 
+import com.personal.common.code.ResponseCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -8,7 +9,7 @@ public class SuccessResponse<T> extends BaseResponse {
     private T data;
 
     public SuccessResponse(T data) {
-        super(HttpStatus.OK.value(), "정상적으로 처리되었습니다.");
+        super(HttpStatus.OK.value(), ResponseCode.SUCCESS.getMessage());
         this.data = data;
     }
 

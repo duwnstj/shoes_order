@@ -1,9 +1,13 @@
 package com.personal.domain.user.service;
 
+import com.personal.common.code.ResponseCode;
 import com.personal.common.config.JwtUtil;
 import com.personal.common.entity.AuthUser;
 import com.personal.common.enums.UserRole;
+import com.personal.common.exception.custom.BadRequestException;
+import com.personal.common.exception.custom.NotFoundException;
 import com.personal.domain.user.dto.UserRequest;
+import com.personal.domain.user.exception.InvalidPasswordException;
 import com.personal.domain.user.repository.UserRepository;
 import com.personal.entity.user.User;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +30,16 @@ public class UserService {
 
     @Transactional
     public String login(UserRequest.Login login) {
-        User user = userRepository.findByEmail(login.email()).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(login.email()).orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_USER));
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(login.password(), user.getPassword())) {
-            throw new RuntimeException("비밀번호 틀림");
+            throw new InvalidPasswordException(ResponseCode.PASSWORD_NOT_MATCHED);
         }
 
         // 삭제 여부 검증
         if (user.isDeleted()) {
-            throw new RuntimeException("사용 불가 아이디");
+            throw new BadRequestException(ResponseCode.NOT_USE_USER);
         }
 
         // 토큰 생성
@@ -47,12 +51,12 @@ public class UserService {
     public void register(UserRequest.Register register) {
         // 중복된 이메일 확인
         if (userRepository.findByEmail(register.email()).isPresent()) {
-            throw new RuntimeException("이메일 중복");
+            throw new BadRequestException(ResponseCode.EMAIL_ALREADY_REGISTERED);
         }
 
         // 비밀번호 정규식 검증
         if (!passwordVerification(register.password())) {
-            throw new RuntimeException("비밀번호 정규식 검증에 걸림");
+            throw new InvalidPasswordException(ResponseCode.INVALID_PASSWORD_FORMAT);
         }
 
         // 비밀번호 인코딩
