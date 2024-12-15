@@ -29,7 +29,7 @@ public class UserService {
     private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
 
     @Transactional
-    public String[] login(UserRequest.Login login) {
+    public String login(UserRequest.Login login) {
         User user = userRepository.findByEmail(login.email()).orElseThrow(() -> new RuntimeException("User not found"));
 
         // 비밀번호 검증
@@ -43,14 +43,12 @@ public class UserService {
         }
 
         // 토큰 생성
-        String[] result = new String[2];
-        result[0] = jwtUtil.createToken(user.getId() , user.getEmail() , user.getRole() , JwtUtil.ACCESS);
-        result[1] = jwtUtil.createToken(user.getId() , user.getEmail() , user.getRole() , JwtUtil.REFRESH);
-        return result;
+        String refreshToken = jwtUtil.createToken(user.getId() , user.getEmail() , user.getRole() , JwtUtil.REFRESH);
+        return jwtUtil.createToken(user.getId() , user.getEmail() , user.getRole() , JwtUtil.ACCESS);
     }
 
     @Transactional
-    public String[] register(UserRequest.Register register) {
+    public void register(UserRequest.Register register) {
         // 중복된 이메일 확인
         if (userRepository.findByEmail(register.email()).isPresent()) {
             throw new RuntimeException("이메일 중복");
@@ -65,13 +63,7 @@ public class UserService {
         String encryptPassword = passwordEncoder.encode(register.password());
         User user = new User(register.email() , encryptPassword , register.name() , UserRole.ROLE_USER);
 
-        User saveUser = userRepository.save(user);
-
-        // 토큰 생성
-        String[] result = new String[2];
-        result[0] = jwtUtil.createToken(saveUser.getId() , saveUser.getEmail() , user.getRole() , JwtUtil.ACCESS);
-        result[1] = jwtUtil.createToken(saveUser.getId() , saveUser.getEmail() , user.getRole() , JwtUtil.REFRESH);
-        return result;
+        userRepository.save(user);
     }
 
     public void logout(AuthUser authUser) {

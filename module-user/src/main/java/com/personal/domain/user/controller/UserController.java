@@ -26,10 +26,9 @@ public class UserController {
     public ResponseEntity<SuccessResponse<Void>> login(
             @Valid @RequestBody UserRequest.Login login
     ) {
-        String[] token = userService.login(login);
+        String token = userService.login(login);
         return ResponseEntity.ok()
-                .header(AUTHORIZATION, token[0])
-                .header("REFRESH_TOKEN", token[1])
+                .header(AUTHORIZATION, token)
                 .body(SuccessResponse.of(null));
     }
 
@@ -37,10 +36,8 @@ public class UserController {
     public ResponseEntity<SuccessResponse<Void>> register(
             @Valid @RequestBody UserRequest.Register register
     ) {
-        String[] token = userService.register(register);
+        userService.register(register);
         return ResponseEntity.ok()
-                .header(AUTHORIZATION, token[0])
-                .header("REFRESH_TOKEN", token[1])
                 .body(SuccessResponse.of(null));
     }
 
