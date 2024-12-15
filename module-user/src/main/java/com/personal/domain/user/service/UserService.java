@@ -24,10 +24,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    private static final String PASSWORD_PATTERN =
-            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
-    private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
-
     @Transactional
     public String login(UserRequest.Login login) {
         User user = userRepository.findByEmail(login.email()).orElseThrow(() -> new RuntimeException("User not found"));
@@ -72,6 +68,7 @@ public class UserService {
 
     // 비밀번호 정규식 검증 ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$
     private boolean passwordVerification(String password) {
+        Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$");
         return pattern.matcher(password).matches();
     }
 }
