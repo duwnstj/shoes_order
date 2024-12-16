@@ -41,9 +41,10 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable) // BasicAuthenticationFilter 비활성화
                 .logout(AbstractHttpConfigurer::disable) // LogoutFilter 비활성화
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/test").permitAll()
-                                .requestMatchers("/api/*/users/login" , "/api/*/users/register").permitAll()
-                                .anyRequest().authenticated()
+                        .requestMatchers("/test").permitAll()
+                        .requestMatchers("/api/*/users/login", "/api/*/users/register",
+                                "api/*owners/login", "api/*owners/register").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfigurationSource))
                 .build();
