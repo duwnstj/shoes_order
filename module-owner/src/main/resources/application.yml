@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    active: dev
+    include: private
+  config:
+    import: optional:classpath:.env[.properties]
+  datasource:
+    url: jdbc:mysql://${DB_LINK}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        auto_quote_keyword: true
+        highlight_sql: true
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+server:
+  port: 8080
+
+jwt:
+  secret:
+    access:
+      key: ${JWT_SECRET_ACCESS_TOKEN}
+    refresh:
+      key: ${JWT_SECRET_REFRESH_TOKEN}

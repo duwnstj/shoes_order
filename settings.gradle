@@ -3,4 +3,6 @@ rootProject.name = 'shoes-order'
 include 'module-common'
 include 'module-user'
 include 'module-entity'
+include 'module-owner'
+include 'module-owner'
 
