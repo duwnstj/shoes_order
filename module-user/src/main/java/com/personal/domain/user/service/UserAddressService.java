@@ -30,7 +30,7 @@ public class UserAddressService {
     @Transactional
     public void addUserAddress(AuthUser authUser, UserAddressRequest.UserAddress address) {
         User user = userCommonService.getUserById(authUser.getUserId());
-        boolean check = userAddressRepository.existsByUserAndRepYNTrue(user , true);
+        boolean check = userAddressRepository.existsByUserAndRepYNTrue(user);
         boolean repYN = !check;
         UserAddress userAddress = UserAddress.builder()
                 .repYN(repYN)

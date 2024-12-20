@@ -16,7 +16,7 @@ public class UserAddressCommonService {
     private final UserAddressRepository userAddressRepository;
 
     public UserAddress getRepUserAddress(long id) {
-        return userAddressRepository.findByIdAndRepYNTrue(id , true).orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_USER_ADDRESS));
+        return userAddressRepository.findByIdAndRepYNTrue(id).orElse(new UserAddress());
     }
 
     public UserAddress getUserAddress(long id) {
