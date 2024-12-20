@@ -4,7 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public sealed interface UserRequest permits
         UserRequest.Login ,
-        UserRequest.Register
+        UserRequest.Register ,
+        UserRequest.UpdateProfile
 {
     record Login(
             @NotBlank
@@ -22,5 +23,13 @@ public sealed interface UserRequest permits
             @NotBlank
             String name
     ) implements UserRequest {
+    }
+
+    record UpdateProfile(
+            @NotBlank
+            String password,
+            @NotBlank
+            String name
+    ) implements  UserRequest {
     }
 }

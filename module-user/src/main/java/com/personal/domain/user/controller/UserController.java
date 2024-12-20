@@ -3,15 +3,13 @@ package com.personal.domain.user.controller;
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
 import com.personal.domain.user.dto.UserRequest;
+import com.personal.domain.user.dto.UserResponse;
 import com.personal.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -22,6 +20,9 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * 로그인
+     * */
     @PostMapping("/login")
     public ResponseEntity<SuccessResponse<Void>> login(
             @Valid @RequestBody UserRequest.Login login
@@ -32,6 +33,9 @@ public class UserController {
                 .body(SuccessResponse.of(null));
     }
 
+    /**
+     * 회원가입
+     * */
     @PostMapping("/register")
     public ResponseEntity<SuccessResponse<Void>> register(
             @Valid @RequestBody UserRequest.Register register
@@ -41,12 +45,39 @@ public class UserController {
                 .body(SuccessResponse.of(null));
     }
 
+    /**
+     * 로그아웃
+     * */
     @PostMapping("/logout")
     public ResponseEntity<SuccessResponse<Void>> logout(
-            @AuthenticationPrincipal AuthUser user
+            @AuthenticationPrincipal AuthUser authUser
     ) {
-        userService.logout(user);
+        userService.logout(authUser);
         return ResponseEntity.ok()
                 .body(SuccessResponse.of(null));
+    }
+
+    /**
+     * 유저 프로필 수정
+     * */
+    @PatchMapping
+    public ResponseEntity<SuccessResponse<Void>> updateProfile(
+            @AuthenticationPrincipal AuthUser authUser ,
+            @Valid @RequestBody UserRequest.UpdateProfile updateProfile
+    ) {
+        userService.updateProfile(authUser , updateProfile);
+        return ResponseEntity.ok()
+                .body(SuccessResponse.of(null));
+    }
+
+    /**
+     * 유저 프로필 조회
+     * */
+    @GetMapping
+    public ResponseEntity<SuccessResponse<UserResponse.getProfile>> getProfile(
+            @AuthenticationPrincipal AuthUser authUser
+    ) {
+        return ResponseEntity.ok()
+                .body(SuccessResponse.of(userService.getProfile(authUser)));
     }
 }

@@ -7,15 +7,18 @@ import com.personal.common.enums.UserRole;
 import com.personal.common.exception.custom.BadRequestException;
 import com.personal.common.exception.custom.NotFoundException;
 import com.personal.domain.user.dto.UserRequest;
+import com.personal.domain.user.dto.UserResponse;
 import com.personal.domain.user.exception.InvalidPasswordException;
 import com.personal.domain.user.repository.UserRepository;
 import com.personal.entity.user.User;
+import com.personal.entity.user.UserAddress;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -28,9 +31,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
+    private final UserCommonService userCommonService;
+    private final UserAddressService userAddressService;
+    private final UserAddressCommonService userAddressCommonService;
+
     @Transactional
     public String login(UserRequest.Login login) {
-        User user = userRepository.findByEmail(login.email()).orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_USER));
+        User user = userCommonService.getUserByEmail(login.email());
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(login.password(), user.getPassword())) {
@@ -50,7 +57,7 @@ public class UserService {
     @Transactional
     public void register(UserRequest.Register register) {
         // 중복된 이메일 확인
-        if (userRepository.findByEmail(register.email()).isPresent()) {
+        if (Objects.nonNull(userCommonService.getUserByEmail(register.email()))) {
             throw new BadRequestException(ResponseCode.EMAIL_ALREADY_REGISTERED);
         }
 
@@ -68,6 +75,26 @@ public class UserService {
 
     public void logout(AuthUser authUser) {
         // TODO : 추후 redis로 관리하게 될 refreshToken 제거용으로 작성!
+    }
+
+    @Transactional
+    public void updateProfile(AuthUser authUser , UserRequest.UpdateProfile updateProfile) {
+        // 본인이 맞는지 검증?
+        User user = userCommonService.getUserById(authUser.getUserId());
+
+        // 비밀번호 검증
+        if (!passwordEncoder.matches(updateProfile.password(), user.getPassword())) {
+            throw new InvalidPasswordException(ResponseCode.PASSWORD_NOT_MATCHED);
+        }
+
+        // 업데이트 로직
+        user.updateName(updateProfile.name());
+    }
+
+    public UserResponse.getProfile getProfile(AuthUser authUser) {
+        User user = userCommonService.getUserById(authUser.getUserId());
+        UserAddress userAddress = userAddressCommonService.getRepUserAddress(authUser.getUserId());
+        return new UserResponse.getProfile(user.getEmail() , user.getName() , userAddress.getAddress() , userAddress.getAddressDetail());
     }
 
     // 비밀번호 정규식 검증 ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$
