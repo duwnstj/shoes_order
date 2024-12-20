@@ -5,7 +5,6 @@ import com.personal.common.config.JwtUtil;
 import com.personal.common.entity.AuthUser;
 import com.personal.common.enums.UserRole;
 import com.personal.common.exception.custom.BadRequestException;
-import com.personal.common.exception.custom.NotFoundException;
 import com.personal.domain.user.dto.UserRequest;
 import com.personal.domain.user.dto.UserResponse;
 import com.personal.domain.user.exception.InvalidPasswordException;

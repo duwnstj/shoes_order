@@ -44,4 +44,8 @@ public class UserAddress {
         this.address = address;
         this.addressDetail = addressDetail;
     }
+
+    public void updateRepYN(boolean repYN) {
+        this.repYN = repYN;
+    }
 }
