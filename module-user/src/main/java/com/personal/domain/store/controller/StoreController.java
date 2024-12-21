@@ -21,11 +21,16 @@ public class StoreController {
     private final StoreService storeService;
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<Page<StoreResponse.Info>>> getStores(
-            @AuthenticationPrincipal AuthUser authUser ,
+    public ResponseEntity<SuccessResponse<Page<StoreResponse.Infos>>> getStores(
             @ModelAttribute StoreRequest.GetStores getStores
             ) {
-        log.info("getStores {}", getStores);
-        return ResponseEntity.ok().body(SuccessResponse.of(storeService.getStores(authUser, getStores)));
+        return ResponseEntity.ok().body(SuccessResponse.of(storeService.getStores(getStores)));
+    }
+
+    @GetMapping("/{storeId}")
+    public ResponseEntity<SuccessResponse<StoreResponse.Info>> getStore(
+            @PathVariable Long storeId
+            ) {
+        return ResponseEntity.ok().body(SuccessResponse.of(storeService.getStore(storeId)));
     }
 }

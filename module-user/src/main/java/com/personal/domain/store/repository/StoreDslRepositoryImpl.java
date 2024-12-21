@@ -26,7 +26,7 @@ public class StoreDslRepositoryImpl implements StoreDslRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<StoreResponse.Info> getStores(StoreRequest.GetStores getStores, Pageable pageable) {
+    public Page<StoreResponse.Infos> getStores(StoreRequest.GetStores getStores, Pageable pageable) {
 
         JPQLQuery<Long> productCnt = JPAExpressions
                 .select(product.count())
@@ -36,8 +36,8 @@ public class StoreDslRepositoryImpl implements StoreDslRepository {
                         product.isDeleted.eq(false),
                         product.isSold.eq(true));
 
-        List<StoreResponse.Info> results = queryFactory
-                .select(Projections.constructor(StoreResponse.Info.class ,
+        List<StoreResponse.Infos> results = queryFactory
+                .select(Projections.constructor(StoreResponse.Infos.class ,
                         store.id ,
                         store.name ,
                         store.tel ,

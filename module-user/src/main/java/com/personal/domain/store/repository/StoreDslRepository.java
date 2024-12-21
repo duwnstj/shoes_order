@@ -6,5 +6,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface StoreDslRepository {
-    Page<StoreResponse.Info> getStores(StoreRequest.GetStores getStores , Pageable pageable);
+    Page<StoreResponse.Infos> getStores(StoreRequest.GetStores getStores , Pageable pageable);
 }
