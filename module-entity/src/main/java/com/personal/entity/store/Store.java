@@ -32,6 +32,9 @@ public class Store extends BaseEntity {
 
     private String description;
 
+    @Column(nullable = false)
+    private boolean isDeleted = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id" , nullable = false)
     private User user;
