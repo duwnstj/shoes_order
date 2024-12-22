@@ -26,7 +26,7 @@ public class Cart {
     private Long qty;
 
     @Column(nullable = false)
-    private boolean customYM;
+    private boolean customYN;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id" , nullable = false)
