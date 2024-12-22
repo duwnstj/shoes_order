@@ -18,11 +18,25 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
+    /**
+     * 매장 상품 조회
+     * */
     @GetMapping
     public ResponseEntity<SuccessResponse<List<ProductResponse.Info>>> getProducts(
             @PathVariable Long storeId ,
             @ModelAttribute ProductRequest.GetProduct getProduct
             ) {
         return ResponseEntity.ok().body(SuccessResponse.of(productService.getProducts(storeId , getProduct)));
+    }
+
+    /**
+     * 매장 상품 상세 조회
+     * */
+    @GetMapping("/{productId}")
+    public ResponseEntity<SuccessResponse<ProductResponse.Info>> getProduct(
+            @PathVariable Long storeId ,
+            @PathVariable Long productId
+    ) {
+        return ResponseEntity.ok().body(SuccessResponse.of(productService.getProduct(storeId , productId)));
     }
 }
