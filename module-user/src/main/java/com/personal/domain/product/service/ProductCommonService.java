@@ -19,7 +19,7 @@ public class ProductCommonService {
         return productRepository.findByStore_Id(storeId);
     }
 
-    public Product getProductByIdAndStoreId(Long storeId , Long productId) {
+    public Product getProductByIdAndStoreId(Long productId , Long storeId) {
         return productRepository.findByIdAndStore_Id(productId, storeId);
     }
 }

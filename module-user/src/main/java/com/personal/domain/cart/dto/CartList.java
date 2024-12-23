@@ -4,6 +4,8 @@ public sealed interface CartList permits
         CartList.Cart
 {
     record Cart(
+        Long storeId,
+        Long storeName,
         Long productId,
         String productName,
         Long length,

@@ -23,6 +23,8 @@ public class CartDslRepositoryImpl implements CartDslRepository {
 
         return jpaQueryFactory
                 .select(Projections.constructor(CartList.Cart.class ,
+                        store.id,
+                        store.name,
                         product.id,
                         product.name,
                         cart.length,

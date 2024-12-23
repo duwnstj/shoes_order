@@ -34,4 +34,8 @@ public class OrderDetailService {
                 )
         ).toList();
     }
+
+    public void saveAll(List<OrdersDetail> orderDetails) {
+        orderDetailRepository.saveAll(orderDetails);
+    }
 }

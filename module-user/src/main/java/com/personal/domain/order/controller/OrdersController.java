@@ -25,9 +25,10 @@ public class OrdersController {
      * */
     @PostMapping
     public ResponseEntity<SuccessResponse<Void>> orders(
-            @AuthenticationPrincipal AuthUser authUser
+            @AuthenticationPrincipal AuthUser authUser ,
+            @RequestBody OrderRequest.Order order
     ) {
-        ordersService.orders(authUser);
+        ordersService.orders(authUser , order);
         return ResponseEntity.ok().body(SuccessResponse.of(null));
     }
 

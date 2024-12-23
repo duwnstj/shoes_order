@@ -24,7 +24,9 @@ public enum ResponseCode {
 
     NOT_FOUND_CART("장바구니 정보를 찾을 수 없습니다."),
 
-    NOT_FOUND_ORDERS("주문 정보를 찾을 수 없습니다.")
+    NOT_FOUND_ORDERS("주문 정보를 찾을 수 없습니다."),
+
+    INVALID_ORDER_ACCESS("잘못된 주문 접근입니다.")
     ;
 
     private final String message;

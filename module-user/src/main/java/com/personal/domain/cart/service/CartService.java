@@ -28,22 +28,14 @@ import java.util.List;
 @Service
 public class CartService {
 
+    private final CartCommonService cartCommonService;
     private final UserCommonService userCommonService;
     private final StoreCommonService storeCommonService;
     private final ProductCommonService productCommonService;
     private final CartRepository cartRepository;
 
     public CartResponse.GetCart getCarts(AuthUser authUser) {
-        List<CartList.Cart> cartList = cartRepository.getCarts(authUser.getUserId());
-
-        Long sum = 0L;
-        for (CartList.Cart cart : cartList) {
-            sum += cart.basePrice();
-            if (cart.customYN()) sum += cart.customPrice();
-        }
-        TotalResponse.TotalAmt totalAmt = new TotalResponse.TotalAmt(sum , 0L);
-
-        return new CartResponse.GetCart(cartList, totalAmt);
+        return cartCommonService.getCarts(authUser.getUserId());
     }
 
     @Transactional
@@ -56,7 +48,7 @@ public class CartService {
 
         User user = userCommonService.getUserById(authUser.getUserId());
         Store store = storeCommonService.getStoreById(storeId);
-        Product product = productCommonService.getProductByIdAndStoreId(storeId , addCart.productId());
+        Product product = productCommonService.getProductByIdAndStoreId(addCart.productId() , storeId);
 
         Cart cart = Cart.builder()
                 .length(addCart.length())
