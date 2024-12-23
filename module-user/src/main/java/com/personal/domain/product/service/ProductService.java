@@ -23,7 +23,7 @@ public class ProductService {
     }
 
     public ProductResponse.Info getProduct(Long storeId , Long productId) {
-        Product product = productCommonService.getProduct(storeId , productId);
+        Product product = productCommonService.getProductByIdAndStoreId(storeId , productId);
         return new ProductResponse.Info(product.getId() , product.getName() , product.getCategory() , product.getBasePrice() , product.getCustomPrice());
     }
 }

@@ -3,11 +3,21 @@ package com.personal.domain.cart.dto;
 import jakarta.validation.constraints.NotNull;
 
 public sealed interface CartRequest permits
-    CartRequest.WriteCart
+    CartRequest.AddCart,
+    CartRequest.ModCart
 {
-    record WriteCart(
+    record AddCart(
             @NotNull
             Long productId,
+            Long length,
+            Long width,
+            @NotNull
+            Long qty,
+            boolean customYN
+    ) implements CartRequest {
+    }
+
+    record ModCart(
             Long length,
             Long width,
             @NotNull

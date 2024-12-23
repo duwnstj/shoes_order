@@ -21,7 +21,9 @@ public enum ResponseCode {
     FORBIDDEN_ADDRESS_UPDATE("해당 주소 수정이 허용되지 않습니다."),
     FORBIDDEN_ADDRESS_DELETE("해당 주소 삭제가 허용되지 않습니다."),
 
-    NOT_FOUND_STORE("매장를 찾을 수 없습니다.")
+    NOT_FOUND_STORE("매장를 찾을 수 없습니다."),
+
+    NOT_FOUND_CART("장바구니 정보를 찾을 수 없습니다.")
     ;
 
     private final String message;

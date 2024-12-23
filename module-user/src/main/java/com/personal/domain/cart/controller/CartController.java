@@ -37,9 +37,9 @@ public class CartController {
     public ResponseEntity<SuccessResponse<Void>> addCart(
             @AuthenticationPrincipal AuthUser authUser ,
             @PathVariable Long storeId ,
-            @Valid @RequestBody CartRequest.WriteCart writeCart
+            @Valid @RequestBody CartRequest.AddCart addCart
             ) {
-        cartService.addCart(authUser , storeId , writeCart);
+        cartService.addCart(authUser , storeId , addCart);
         return ResponseEntity.ok().body(SuccessResponse.of(null));
     }
 
@@ -51,9 +51,9 @@ public class CartController {
             @AuthenticationPrincipal AuthUser authUser ,
             @PathVariable Long storeId ,
             @PathVariable Long cartId ,
-            @Valid @RequestBody CartRequest.WriteCart writeCart
+            @Valid @RequestBody CartRequest.ModCart modCart
     ) {
-        cartService.modCart(authUser , storeId , cartId , writeCart);
+        cartService.modCart(authUser , storeId , cartId , modCart);
         return ResponseEntity.ok().body(SuccessResponse.of(null));
     }
 

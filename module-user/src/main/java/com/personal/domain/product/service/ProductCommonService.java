@@ -15,11 +15,11 @@ public class ProductCommonService {
 
     private final ProductRepository productRepository;
 
-    public List<Product> getProducts(Long storeId) {
+    public List<Product> getProductsById(Long storeId) {
         return productRepository.findByStore_Id(storeId);
     }
 
-    public Product getProduct(Long storeId , Long productId) {
+    public Product getProductByIdAndStoreId(Long storeId , Long productId) {
         return productRepository.findByIdAndStore_Id(productId, storeId);
     }
 }

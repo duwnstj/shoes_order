@@ -4,6 +4,7 @@ import com.personal.entity.product.Product;
 import com.personal.entity.store.Store;
 import com.personal.entity.user.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,4 +40,29 @@ public class Cart {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id" , nullable = false)
     private Product product;
+
+    @Builder
+    public Cart(
+            Long length,
+            Long width,
+            Long qty,
+            boolean customYN,
+            User user,
+            Store store,
+            Product product) {
+        this.length = length;
+        this.width = width;
+        this.qty = qty;
+        this.customYN = customYN;
+        this.user = user;
+        this.store = store;
+        this.product = product;
+    }
+
+    public void updateCart(Long length ,Long width , Long qty , boolean customYN) {
+        this.length = length;
+        this.width = width;
+        this.qty = qty;
+        this.customYN = customYN;
+    }
 }
