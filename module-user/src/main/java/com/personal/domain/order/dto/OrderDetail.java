@@ -6,7 +6,7 @@ public sealed interface OrderDetail permits
     record Detail(
         Long id,
         Long productId,
-        Long productName,
+        String productName,
         Long length,
         Long width,
         Long qty,
