@@ -25,7 +25,7 @@ public class ProductController {
     public ResponseEntity<SuccessResponse<List<ProductResponse.Info>>> getProducts(
             @PathVariable Long storeId ,
             @ModelAttribute ProductRequest.GetProduct getProduct
-            ) {
+    ) {
         return ResponseEntity.ok().body(SuccessResponse.of(productService.getProducts(storeId , getProduct)));
     }
 
