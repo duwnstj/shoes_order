@@ -48,6 +48,12 @@ public class CartService {
 
     @Transactional
     public void addCart(AuthUser authUser , Long storeId , CartRequest.AddCart addCart) {
+        // 현재 담겨 있는 장바구니에 다른 매장의 상품이 담겨 있다면 초기화 작업!
+        List<Cart> carts = cartRepository.findByUserIdAndStoreId(authUser.getUserId(), storeId);
+        if (!carts.isEmpty() && !carts.get(0).getStore().getId().equals(storeId)) {
+            emptyCart(authUser);
+        }
+
         User user = userCommonService.getUserById(authUser.getUserId());
         Store store = storeCommonService.getStoreById(storeId);
         Product product = productCommonService.getProductByIdAndStoreId(storeId , addCart.productId());

@@ -12,18 +12,41 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class OrdersService {
     private final OrdersCommonService ordersCommonService;
     private final OrderDetailService orderDetailService;
     private final OrdersRepository ordersRepository;
 
+    @Transactional
     public void orders(AuthUser authUser) {
+        // 내 장바구니가 맞는지? (장바구니가 비어있는지도 확인)
+
+
+        // 장바구니 조회(현 시점 가격 포함)
+
+
+        // 장바구니 조회한 데이터를 기반으로 데이터 가공
+        // 개별 가격은 어떻고? 총 가격은 어떤지?!
+
+
+        // OrderNO 채번
+
+
+        // OrderDate 오늘 날짜
+
+
+        // Orders에 저장
+
+
+        // OrdersDetail에 저장
 
     }
 
