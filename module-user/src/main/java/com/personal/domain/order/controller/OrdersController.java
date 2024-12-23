@@ -3,9 +3,11 @@ package com.personal.domain.order.controller;
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
 import com.personal.domain.order.dto.OrderRequest;
+import com.personal.domain.order.dto.OrderResponse;
 import com.personal.domain.order.service.OrdersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -25,28 +27,29 @@ public class OrdersController {
     public ResponseEntity<SuccessResponse<Void>> orders(
             @AuthenticationPrincipal AuthUser authUser
     ) {
-        return null;
+        ordersService.orders(authUser);
+        return ResponseEntity.ok().body(SuccessResponse.of(null));
     }
 
     /**
      * 주문 다건 조회
      * */
     @GetMapping
-    public ResponseEntity<SuccessResponse<Void>> getOrders(
+    public ResponseEntity<SuccessResponse<Page<OrderResponse.Infos>>> getOrders(
             @AuthenticationPrincipal AuthUser authUser ,
             @ModelAttribute OrderRequest.GetOrder getOrder
     ) {
-        return null;
+        return ResponseEntity.ok().body(SuccessResponse.of(ordersService.getOrders(authUser, getOrder)));
     }
 
     /**
      * 주문 상세 조회
      * */
     @GetMapping("/{orderId}")
-    public ResponseEntity<SuccessResponse<Void>> getOrders32(
+    public ResponseEntity<SuccessResponse<OrderResponse.Info>> getOrder(
             @AuthenticationPrincipal AuthUser authUser ,
             @PathVariable Long orderId
     ) {
-        return null;
+        return ResponseEntity.ok().body(SuccessResponse.of(ordersService.getOrder(authUser, orderId)));
     }
 }

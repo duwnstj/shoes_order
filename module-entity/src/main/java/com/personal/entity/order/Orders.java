@@ -17,7 +17,7 @@ public class Orders extends BaseEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private Long orderNo;
+    private String orderNo;
 
     @Column(nullable = false)
     private LocalDate orderDate;
