@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @NoArgsConstructor
@@ -28,6 +31,9 @@ public class Review extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Orders orders;
+
+    @OneToMany(mappedBy = "review" , cascade = CascadeType.REMOVE , orphanRemoval = true)
+    private List<ReviewImage> reviewImages = new ArrayList<>();
 
     @Builder
     public Review(String title, String content , Double star, Orders orders) {

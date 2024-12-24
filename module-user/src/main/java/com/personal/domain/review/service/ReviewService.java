@@ -1,22 +1,26 @@
 package com.personal.domain.review.service;
 
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.personal.common.code.ResponseCode;
-import com.personal.common.component.FileManagement;
 import com.personal.common.entity.AuthUser;
 import com.personal.common.exception.custom.ConflictException;
+import com.personal.common.exception.custom.ForbiddenException;
 import com.personal.common.exception.custom.NotFoundException;
 import com.personal.domain.order.service.OrdersCommonService;
 import com.personal.domain.review.dto.ReviewRequest;
+import com.personal.domain.review.dto.ReviewResponse;
 import com.personal.domain.review.event.ReviewImageRemoveEvent;
 import com.personal.domain.review.event.ReviewImageSaveEvent;
 import com.personal.domain.review.event.ReviewImageUpdateEvent;
 import com.personal.domain.review.repository.ReviewRepository;
 import com.personal.entity.order.Orders;
 import com.personal.entity.review.Review;
+import com.personal.entity.review.ReviewImage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +34,7 @@ import java.util.Objects;
 @Service
 public class ReviewService {
 
+    private final ReviewImageCommonService reviewImageCommonService;
     private final ApplicationEventPublisher eventPublisher;
     private final OrdersCommonService ordersCommonService;
     private final ReviewRepository reviewRepository;
@@ -59,7 +64,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public void modReview(AuthUser authUser , Long orderId , ReviewRequest.ModReview modReview , List<MultipartFile> files) {
+    public void modReview(Long orderId , ReviewRequest.ModReview modReview , List<MultipartFile> files) {
         Review review = reviewRepository.findByOrdersId(orderId);
         if (Objects.isNull(review)) {
             throw new NotFoundException(ResponseCode.NOT_FOUND_REVIEW);
@@ -75,7 +80,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public void removeReview(AuthUser authUser , Long orderId) {
+    public void removeReview(Long orderId) {
         Review review = reviewRepository.findByOrdersId(orderId);
         if (Objects.isNull(review)) {
             throw new NotFoundException(ResponseCode.NOT_FOUND_REVIEW);
@@ -83,5 +88,25 @@ public class ReviewService {
 
         reviewRepository.delete(review);
         eventPublisher.publishEvent(new ReviewImageRemoveEvent(review));
+    }
+
+    public ReviewResponse.Info getReview(AuthUser authUser , Long orderId) {
+        Review review = reviewRepository.findByOrdersId(orderId);
+        if (!review.getOrders().getUser().getId().equals(authUser.getUserId())) {
+            throw new ForbiddenException(ResponseCode.INVALID_REVIEW_ACCESS);
+        }
+        List<ReviewImage> reviewImages = reviewImageCommonService.getInfos(review);
+        List<ReviewResponse.ImageInfo> imageInfos = reviewImages.stream().map(reviewImage -> new ReviewResponse.ImageInfo(reviewImage.getId() , reviewImage.getImageUrl())).toList();
+        return new ReviewResponse.Info(review.getTitle() , review.getContent() , review.getStar() , review.getCreatedAt() , review.getUpdatedAt() , imageInfos);
+    }
+
+    public Page<ReviewResponse.Info> getMyReviews(AuthUser authUser, ReviewRequest.MyReview myReview) {
+        Pageable pageable = PageRequest.of(myReview.page() - 1, myReview.size());
+        return reviewRepository.getMyReviews(authUser.getUserId(), myReview , pageable);
+    }
+
+    public Page<ReviewResponse.Info> getMyReviewsByStore(AuthUser authUser, Long storeId, ReviewRequest.MyReview myReview) {
+        Pageable pageable = PageRequest.of(myReview.page() - 1, myReview.size());
+        return reviewRepository.getMyReviewsByStore(authUser.getUserId(), storeId , myReview , pageable);
     }
 }

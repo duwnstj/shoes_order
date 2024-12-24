@@ -3,10 +3,12 @@ package com.personal.domain.review.controller;
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
 import com.personal.domain.review.dto.ReviewRequest;
+import com.personal.domain.review.dto.ReviewResponse;
 import com.personal.domain.review.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -40,12 +42,11 @@ public class ReviewController {
      * */
     @PatchMapping("/orders/{orderId}/review")
     public ResponseEntity<SuccessResponse<Void>> modReview(
-            @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long orderId,
             @Valid @ModelAttribute ReviewRequest.ModReview modReview,
             @RequestParam(name = "images" , required = false) List<MultipartFile> files
     ) {
-        reviewService.modReview(authUser, orderId, modReview, files);
+        reviewService.modReview(orderId, modReview, files);
         return ResponseEntity.ok().body(SuccessResponse.of(null));
     }
 
@@ -54,10 +55,44 @@ public class ReviewController {
      * */
     @DeleteMapping("/orders/{orderId}/review")
     public ResponseEntity<SuccessResponse<Void>> removeReview(
+            @PathVariable Long orderId
+    ) {
+        reviewService.removeReview(orderId);
+        return ResponseEntity.ok().body(SuccessResponse.of(null));
+    }
+
+    /**
+     * 리뷰 단일 조회
+     * */
+    @GetMapping("/orders/{orderId}/review")
+    public ResponseEntity<SuccessResponse<ReviewResponse.Info>> getReview(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long orderId
     ) {
-        reviewService.removeReview(authUser , orderId);
-        return ResponseEntity.ok().body(SuccessResponse.of(null));
+        return ResponseEntity.ok().body(SuccessResponse.of(reviewService.getReview(authUser , orderId)));
     }
+
+    /**
+     * 리뷰 조회(내기준)
+     * */
+    @GetMapping("/review")
+    public ResponseEntity<SuccessResponse<Page<ReviewResponse.Info>>> getMyReviews(
+            @AuthenticationPrincipal AuthUser authUser,
+            @ModelAttribute ReviewRequest.MyReview myReview
+    ) {
+        return ResponseEntity.ok().body(SuccessResponse.of(reviewService.getMyReviews(authUser , myReview)));
+    }
+
+    /**
+     * 리뷰 조회(가게기준)
+     * */
+    @GetMapping("/stores/{storeId}/review")
+    public ResponseEntity<SuccessResponse<Page<ReviewResponse.Info>>> getMyReviewsByStore(
+            @AuthenticationPrincipal AuthUser authUser,
+            @PathVariable Long storeId,
+            @ModelAttribute ReviewRequest.MyReview myReview
+    ) {
+        return ResponseEntity.ok().body(SuccessResponse.of(reviewService.getMyReviewsByStore(authUser , storeId , myReview)));
+    }
+
 }

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserAddressRepository extends JpaRepository<UserAddress, Long> {
-    Optional<UserAddress> findByIdAndRepYNTrue(Long id);
+    Optional<UserAddress> findByUserIdAndRepYNTrue(Long id);
     boolean existsByUserAndRepYNTrue(User user);
 
     List<UserAddress> findAllByUser(User user);

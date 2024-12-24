@@ -31,7 +31,6 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final UserCommonService userCommonService;
-    private final UserAddressService userAddressService;
     private final UserAddressCommonService userAddressCommonService;
 
     @Transactional
