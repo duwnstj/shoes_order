@@ -11,7 +11,6 @@ import com.personal.domain.owner.dto.OwnerResponse;
 import com.personal.domain.owner.exception.InvalidPasswordException;
 import com.personal.domain.owner.repository.OwnerRepository;
 import com.personal.entity.user.User;
-import com.personal.entity.user.UserAddress;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -92,10 +91,7 @@ public class OwnerService {
     // 유저 프로필 조회
     public OwnerResponse.GetProfile getProfile(AuthUser authUser) {
         User owner = ownerCommonService.getUserById(authUser.getUserId());
-        // 로그인한 유저의 대표 주소 가져오기
-        UserAddress ownerAddress = ownerAddressCommonService.getReqOwnerAddress(authUser.getUserId());
-
-        return new OwnerResponse.GetProfile(owner.getEmail(), owner.getName(), ownerAddress.getAddress(), ownerAddress.getAddressDetail());
+        return new OwnerResponse.GetProfile(owner.getEmail(), owner.getName());
     }
 
 

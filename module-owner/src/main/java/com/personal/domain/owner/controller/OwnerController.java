@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-@RequestMapping("api/v1/owners")
+@RequestMapping("api/v1/users")
 @RestController
 @RequiredArgsConstructor
 public class OwnerController {

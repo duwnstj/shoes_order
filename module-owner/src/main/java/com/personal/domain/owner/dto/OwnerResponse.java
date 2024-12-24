@@ -4,9 +4,7 @@ public sealed interface OwnerResponse permits
         OwnerResponse.GetProfile {
     record GetProfile(
             String email,
-            String name,
-            String address,
-            String addressDetail
+            String name
     ) implements OwnerResponse {
     }
 }
