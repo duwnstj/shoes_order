@@ -50,4 +50,13 @@ public class Store extends BaseEntity {
         this.description = description;
         this.user = user;
     }
+
+    public void updateInfos(String name, String tel, String zip, String address, String addressDetail, String description) {
+        this.name = name;
+        this.tel = tel;
+        this.zip = zip;
+        this.address = address;
+        this.addressDetail = addressDetail;
+        this.description = description;
+    }
 }

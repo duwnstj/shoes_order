@@ -48,12 +48,15 @@ public class StoreController {
     /**
      * 매장 수정
      */
-    @PatchMapping
+    @PatchMapping("/{storeId}")
     public ResponseEntity<SuccessResponse<Void>> updateStores(
             @AuthenticationPrincipal AuthUser authUser,
+            @PathVariable Long storeId,
             @Valid @RequestBody StoreRequest.UpdateStores updateStores
-    ){
-
+    ) {
+        storeService.updateStores(authUser, storeId, updateStores);
+        return ResponseEntity.ok()
+                .body(SuccessResponse.of(null));
     }
 
 }

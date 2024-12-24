@@ -1,9 +1,11 @@
 package com.personal.domain.store.service;
 
+import com.personal.common.code.ResponseCode;
 import com.personal.common.entity.AuthUser;
 import com.personal.domain.owner.service.OwnerCommonService;
 import com.personal.domain.store.dto.StoreRequest;
 import com.personal.domain.store.dto.StoreResponse;
+import com.personal.domain.store.exception.StoreOwnerMismatchException;
 import com.personal.domain.store.repository.StoreRepository;
 import com.personal.entity.store.Store;
 import com.personal.entity.user.User;
@@ -21,6 +23,7 @@ import java.util.List;
 public class StoreService {
     private final StoreRepository storeRepository;
     private final OwnerCommonService ownerCommonService;
+    private final StoreCommonService storeCommonService;
 
 
     @Transactional
@@ -44,5 +47,20 @@ public class StoreService {
         return storeList.stream()
                 .map(store -> new StoreResponse.GetStores(store.getName(), store.getTel(), store.getZip(), store.getAddress(), store.getAddressDetail()))
                 .toList();
+    }
+
+    @Transactional
+    public void updateStores(AuthUser authUser, Long storeId, StoreRequest.UpdateStores updateStores) {
+        Store store = storeCommonService.getStores(storeId);
+        if (!authUser.getUserId().equals(store.getUser().getId())) {
+            throw new StoreOwnerMismatchException(ResponseCode.UNAUTHORIZED_ACCESS);
+        }
+        store.updateInfos(
+                updateStores.name(),
+                updateStores.tel(),
+                updateStores.zip(),
+                updateStores.address(),
+                updateStores.addressDetail(),
+                updateStores.description());
     }
 }
