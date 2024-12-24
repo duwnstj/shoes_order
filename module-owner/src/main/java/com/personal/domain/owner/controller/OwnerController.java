@@ -1,11 +1,13 @@
 package com.personal.domain.owner.controller;
 
+import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
 import com.personal.domain.owner.dto.OwnerRequest;
 import com.personal.domain.owner.service.OwnerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +33,20 @@ public class OwnerController {
 
     @PostMapping("/register")
     public ResponseEntity<SuccessResponse<Void>> login(
-            @Valid @RequestBody OwnerRequest.Register register){
+            @Valid @RequestBody OwnerRequest.Register register) {
         ownerService.register(register);
         return ResponseEntity.ok()
                 .body(SuccessResponse.of(null));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<SuccessResponse<Void>> logout(
+            @AuthenticationPrincipal AuthUser authUser
+    ) {
+        ownerService.logout(authUser);
+
+        return ResponseEntity.ok()
+                .body(SuccessResponse.of(null));
+
     }
 }

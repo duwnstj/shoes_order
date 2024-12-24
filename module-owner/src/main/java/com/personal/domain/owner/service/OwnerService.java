@@ -2,6 +2,7 @@ package com.personal.domain.owner.service;
 
 import com.personal.common.code.ResponseCode;
 import com.personal.common.config.JwtUtil;
+import com.personal.common.entity.AuthUser;
 import com.personal.common.enums.UserRole;
 import com.personal.common.exception.custom.BadRequestException;
 import com.personal.common.exception.custom.NotFoundException;
@@ -58,9 +59,15 @@ public class OwnerService {
         ownerRepository.save(owner);
     }
 
+    public void logout(AuthUser authUser) {
+        // TODO : 추후 redis로 관리하게 될 refreshToken 제거용으로 작성!
+    }
+
     // 비밀번호 정규식 검증 ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$
     private boolean passwordVerification(String password) {
         Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$");
         return pattern.matcher(password).matches();
     }
+
+
 }
