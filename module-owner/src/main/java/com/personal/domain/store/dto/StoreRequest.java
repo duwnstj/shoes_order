@@ -20,5 +20,8 @@ public sealed interface StoreRequest permits
                 String description
                 ) implements StoreRequest {
         }
+
+        record UpdateStores() {
+        }
     }
 

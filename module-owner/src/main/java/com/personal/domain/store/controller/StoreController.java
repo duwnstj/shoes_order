@@ -3,16 +3,16 @@ package com.personal.domain.store.controller;
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
 import com.personal.domain.store.dto.StoreRequest;
+import com.personal.domain.store.dto.StoreResponse;
 import com.personal.domain.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -33,4 +33,27 @@ public class StoreController {
         return ResponseEntity.ok()
                 .body(SuccessResponse.of(null));
     }
+
+    /**
+     * 매장 조회(자신이 등록한 매장)
+     */
+    @GetMapping
+    public ResponseEntity<SuccessResponse<List<StoreResponse.GetStores>>> getStores(
+            @AuthenticationPrincipal AuthUser authUser
+    ) {
+        return ResponseEntity.ok()
+                .body(SuccessResponse.of(storeService.getStores(authUser)));
+    }
+
+    /**
+     * 매장 수정
+     */
+    @PatchMapping
+    public ResponseEntity<SuccessResponse<Void>> updateStores(
+            @AuthenticationPrincipal AuthUser authUser,
+            @Valid @RequestBody StoreRequest.UpdateStores updateStores
+    ){
+
+    }
+
 }
