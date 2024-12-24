@@ -94,5 +94,4 @@ public class ReviewController {
     ) {
         return ResponseEntity.ok().body(SuccessResponse.of(reviewService.getMyReviewsByStore(authUser , storeId , myReview)));
     }
-
 }
