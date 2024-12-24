@@ -21,14 +21,43 @@ import java.util.List;
 public class ReviewController {
     private final ReviewService reviewService;
 
+    /**
+     * 리뷰 등록
+     * */
     @PostMapping("/orders/{orderId}/review")
     public ResponseEntity<SuccessResponse<Void>> addReview(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long orderId,
-            @Valid @ModelAttribute ReviewRequest.WriteReview writeReview,
+            @Valid @ModelAttribute ReviewRequest.AddReview addReview,
             @RequestParam(name = "images" , required = false) List<MultipartFile> files
     ) {
-        reviewService.addReview(authUser , orderId , writeReview , files);
+        reviewService.addReview(authUser , orderId , addReview , files);
+        return ResponseEntity.ok().body(SuccessResponse.of(null));
+    }
+
+    /**
+     * 리뷰 수정
+     * */
+    @PatchMapping("/orders/{orderId}/review")
+    public ResponseEntity<SuccessResponse<Void>> modReview(
+            @AuthenticationPrincipal AuthUser authUser,
+            @PathVariable Long orderId,
+            @Valid @ModelAttribute ReviewRequest.ModReview modReview,
+            @RequestParam(name = "images" , required = false) List<MultipartFile> files
+    ) {
+        reviewService.modReview(authUser, orderId, modReview, files);
+        return ResponseEntity.ok().body(SuccessResponse.of(null));
+    }
+
+    /**
+     * 리뷰 삭제
+     * */
+    @DeleteMapping("/orders/{orderId}/review")
+    public ResponseEntity<SuccessResponse<Void>> removeReview(
+            @AuthenticationPrincipal AuthUser authUser,
+            @PathVariable Long orderId
+    ) {
+        reviewService.removeReview(authUser , orderId);
         return ResponseEntity.ok().body(SuccessResponse.of(null));
     }
 }

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,13 +32,12 @@ public class ReviewImageService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    @Transactional
     public void save(Review review , List<MultipartFile> files) {
         try {
             for (MultipartFile file : files) {
                 // 리뷰 이미지 처리
                 awsS3Upload(file).thenAccept(url -> {
-                    log.info("Uploading file {} to S3", url);
-
                     // 리뷰 이미지 등록
                     ReviewImage reviewImage = new ReviewImage(url , review);
                     reviewImageRepository.save(reviewImage);
@@ -45,6 +45,36 @@ public class ReviewImageService {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Transactional
+    public void update(Review review , List<Long> imageNumber , List<MultipartFile> files) {
+        try {
+            for (int i = 0; i < imageNumber.size(); i++) {
+                Long imageId = imageNumber.get(i);
+                MultipartFile file = files.get(i);
+                reviewImageRepository.deleteById(imageId);
+
+                awsS3Upload(file).thenAccept(url -> {
+                    // 리뷰 이미지 등록
+                    ReviewImage reviewImage = new ReviewImage(url , review);
+                    reviewImageRepository.save(reviewImage);
+                });
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Transactional
+    public void remove(Review review) {
+        List<ReviewImage> reviewImages = reviewImageRepository.findByReview(review);
+
+        for (ReviewImage reviewImage : reviewImages) {
+            String filename = fileManagement.extractFilenameFromUrl(reviewImage.getImageUrl());
+            amazonS3Client.deleteObject(bucket, filename);
+            reviewImageRepository.delete(reviewImage);
         }
     }
 

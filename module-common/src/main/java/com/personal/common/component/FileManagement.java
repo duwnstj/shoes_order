@@ -27,4 +27,8 @@ public class FileManagement {
         int pos = originalFilename.lastIndexOf(".");        // 위치를 가져온다.
         return originalFilename.substring(pos + 1);   // . 다음에 있는 확장자명 꺼냄
     }
+
+    public String extractFilenameFromUrl(String imageUrl) {
+        return imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+    }
 }

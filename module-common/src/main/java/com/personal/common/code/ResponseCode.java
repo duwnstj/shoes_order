@@ -28,6 +28,7 @@ public enum ResponseCode {
 
     INVALID_ORDER_ACCESS("잘못된 주문 접근입니다."),
 
+    NOT_FOUND_REVIEW("리뷰 정보를 찾을 수 없습니다."),
     ALREADY_REGISTERED_REVIEW("이미 등록된 리뷰가 있습니다.")
     ;
 
