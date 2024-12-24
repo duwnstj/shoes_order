@@ -7,9 +7,12 @@ import com.personal.common.enums.UserRole;
 import com.personal.common.exception.custom.BadRequestException;
 import com.personal.common.exception.custom.NotFoundException;
 import com.personal.domain.owner.dto.OwnerRequest;
+import com.personal.domain.owner.dto.OwnerResponse;
 import com.personal.domain.owner.exception.InvalidPasswordException;
 import com.personal.domain.owner.repository.OwnerRepository;
 import com.personal.entity.user.User;
+import com.personal.entity.user.UserAddress;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,10 +27,13 @@ public class OwnerService {
     private final JwtUtil jwtUtil;
     private final OwnerRepository ownerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final OwnerCommonService ownerCommonService;
+    private final OwnerAddressCommonService ownerAddressCommonService;
 
     @Transactional
     public String login(OwnerRequest.Login login) {
         User owner = ownerRepository.findByEmail(login.email()).orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_USER));
+
 
         //비밀번호 검증
         if (!passwordEncoder.matches(login.password(), owner.getPassword())) {
@@ -67,6 +73,29 @@ public class OwnerService {
     private boolean passwordVerification(String password) {
         Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$");
         return pattern.matcher(password).matches();
+    }
+
+
+    @Transactional
+    public void updateProfile(AuthUser authUser, OwnerRequest.@Valid UpdateProfile updateProfile) {
+        User owner = ownerCommonService.getUserById(authUser.getUserId());
+
+        //비밀번호 검증
+        if (!passwordEncoder.matches(updateProfile.password(), owner.getPassword())) {
+            throw new InvalidPasswordException(ResponseCode.PASSWORD_NOT_MATCHED);
+        }
+
+        //업데이트 로직
+        owner.updateName(updateProfile.name());
+    }
+
+    // 유저 프로필 조회
+    public OwnerResponse.GetProfile getProfile(AuthUser authUser) {
+        User owner = ownerCommonService.getUserById(authUser.getUserId());
+        // 로그인한 유저의 대표 주소 가져오기
+        UserAddress ownerAddress = ownerAddressCommonService.getReqOwnerAddress(authUser.getUserId());
+
+        return new OwnerResponse.GetProfile(owner.getEmail(), owner.getName(), ownerAddress.getAddress(), ownerAddress.getAddressDetail());
     }
 
 

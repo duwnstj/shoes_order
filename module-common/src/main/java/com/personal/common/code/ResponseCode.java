@@ -13,6 +13,7 @@ public enum ResponseCode {
 
     // User Module Error
     NOT_FOUND_USER("유저를 찾을 수 없습니다."),
+    UNAUTHORIZED_ACCESS("접근권한이 없습니다."),
     EMAIL_ALREADY_REGISTERED("이미 등록된 이메일입니다."),
     PASSWORD_NOT_MATCHED("비밀번호가 일치하지 않습니다."),
     NOT_USE_USER("사용 불가 아이디입니다."),
