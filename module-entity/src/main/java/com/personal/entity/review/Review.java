@@ -3,8 +3,12 @@ package com.personal.entity.review;
 import com.personal.common.entity.BaseEntity;
 import com.personal.entity.order.Orders;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,4 +32,20 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "order_id", nullable = false)
     private Orders orders;
 
+    @OneToMany(mappedBy = "review" , cascade = CascadeType.REMOVE , orphanRemoval = true)
+    private List<ReviewImage> reviewImages = new ArrayList<>();
+
+    @Builder
+    public Review(String title, String content , Double star, Orders orders) {
+        this.title = title;
+        this.content = content;
+        this.star = star;
+        this.orders = orders;
+    }
+
+    public void updateReview(String title, String content , Double star) {
+        this.title = title;
+        this.content = content;
+        this.star = star;
+    }
 }

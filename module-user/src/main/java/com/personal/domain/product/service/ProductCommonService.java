@@ -15,7 +15,11 @@ public class ProductCommonService {
 
     private final ProductRepository productRepository;
 
-    public List<Product> getProducts(Long storeId) {
+    public List<Product> getProductsById(Long storeId) {
         return productRepository.findByStore_Id(storeId);
+    }
+
+    public Product getProductByIdAndStoreId(Long productId , Long storeId) {
+        return productRepository.findByIdAndStore_Id(productId, storeId);
     }
 }

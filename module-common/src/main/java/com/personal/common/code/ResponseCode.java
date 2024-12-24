@@ -2,7 +2,6 @@ package com.personal.common.code;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
@@ -21,7 +20,17 @@ public enum ResponseCode {
     FORBIDDEN_ADDRESS_UPDATE("해당 주소 수정이 허용되지 않습니다."),
     FORBIDDEN_ADDRESS_DELETE("해당 주소 삭제가 허용되지 않습니다."),
 
-    NOT_FOUND_STORE("매장를 찾을 수 없습니다.")
+    NOT_FOUND_STORE("매장를 찾을 수 없습니다."),
+
+    NOT_FOUND_CART("장바구니 정보를 찾을 수 없습니다."),
+
+    NOT_FOUND_ORDERS("주문 정보를 찾을 수 없습니다."),
+
+    INVALID_ORDER_ACCESS("잘못된 주문 접근입니다."),
+
+    NOT_FOUND_REVIEW("리뷰 정보를 찾을 수 없습니다."),
+    INVALID_REVIEW_ACCESS("잘못된 리뷰 접근입니다."),
+    ALREADY_REGISTERED_REVIEW("이미 등록된 리뷰가 있습니다.")
     ;
 
     private final String message;

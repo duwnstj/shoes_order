@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class StoreCommonService {
     private final StoreRepository storeRepository;
 
-    public Store getStore(Long id) {
+    public Store getStoreById(Long id) {
         return storeRepository.findById(id).orElseThrow(() -> new NotFoundException(ResponseCode.NOT_FOUND_STORE));
     }
 }

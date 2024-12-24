@@ -33,8 +33,8 @@ public class StoreService {
     }
 
     public StoreResponse.Info getStore(Long storeId) {
-        Store store = storeCommonService.getStore(storeId);
-        List<Product> products = productCommonService.getProducts(storeId);
+        Store store = storeCommonService.getStoreById(storeId);
+        List<Product> products = productCommonService.getProductsById(storeId);
         List<ProductResponse.Info> productInfos = products
                 .stream()
                 .map(product -> new ProductResponse.Info(product.getId() , product.getName() , product.getCategory() , product.getBasePrice() , product.getCustomPrice()))
