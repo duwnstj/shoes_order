@@ -21,9 +21,11 @@ public class ProductBom {
     @Column(nullable = false)
     private Long baseQty;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_product_id", nullable = false)
     private Product materialProduct;
+
 
     @Column(nullable = false)
     private Long materialQty;
@@ -35,5 +37,12 @@ public class ProductBom {
         this.materialProduct = materialProduct;
         this.materialQty = materialQty;
 
+    }
+
+    public void updateBom(Product baseProduct, Long baseQty, Product materialProduct, Long materialQty) {
+        this.baseProduct = baseProduct;
+        this.baseQty = baseQty;
+        this.materialProduct = materialProduct;
+        this.materialQty = materialQty;
     }
 }

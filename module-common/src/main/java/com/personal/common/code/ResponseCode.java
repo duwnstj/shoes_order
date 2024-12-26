@@ -22,15 +22,23 @@ public enum ResponseCode {
 
 
     //Owner Module Error
+
+    //403
     FORBIDDEN_PRODUCTS_ADD("해당 상품 등록이 허용되지 않습니다."),
     FORBIDDEN_PRODUCTS_UPDATE("해당 상품 수정이 허용되지 않습니다."),
     FORBIDDEN_PRODUCTS_DELETE("해당 상품 삭제가 허용되지 않습니다."),
     FORBIDDEN_STORES_UPDATE("해당 가게 수정이 허용되지 않습니다."),
     FORBIDDEN_STORES_DELETE("해당 가게 삭제가 허용되지 않습니다."),
+
+    //400
+    INVALID_STOCK_QUNTITY("추가,감소할 수량은 0보다 커야 합니다."),
+    INVALID_STOCK("재고가 부족하여 차감할 수 없습니다."),
+
+    //404
     NOT_FOUND_PRODUCT("상품을 찾을 수 없습니다."),
-
-
+    NOT_FOUND_PRODUCTBOM("상품 BOM을 찾을 수 없습니다."),
+    NOT_FOUND_STOCK("재고를 찾을 수 없습니다."),
     NOT_FOUND_STORE("매장을 찾을 수 없습니다.");
 
     private final String message;
-    }
+}

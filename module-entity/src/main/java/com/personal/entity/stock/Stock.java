@@ -31,16 +31,26 @@ public class Stock extends BaseEntity {
     @Column(nullable = false)
     private Long price;
 
-    @Column(nullable = false , unique = true)
+    @Column(nullable = false, unique = true)
     private String lot;
 
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id" , nullable = false)
+    @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id" , nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    public void increase(Long baseQty) {
+
+        this.qty += baseQty;
+    }
+
+    public void decrease(Long decreaseQty) {
+
+        this.qty -= decreaseQty;
+    }
 }
