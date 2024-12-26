@@ -27,7 +27,6 @@ public class OwnerService {
     private final OwnerRepository ownerRepository;
     private final PasswordEncoder passwordEncoder;
     private final OwnerCommonService ownerCommonService;
-    private final OwnerAddressCommonService ownerAddressCommonService;
 
     @Transactional
     public String login(OwnerRequest.Login login) {

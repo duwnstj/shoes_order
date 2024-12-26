@@ -53,7 +53,7 @@ public class StoreService {
     public void updateStores(AuthUser authUser, Long storeId, StoreRequest.UpdateStores updateStores) {
         Store store = storeCommonService.getStores(storeId);
         if (!authUser.getUserId().equals(store.getUser().getId())) {
-            throw new StoreOwnerMismatchException(ResponseCode.UNAUTHORIZED_ACCESS);
+            throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_STORES_UPDATE);
         }
         store.updateInfos(
                 updateStores.name(),
@@ -62,5 +62,15 @@ public class StoreService {
                 updateStores.address(),
                 updateStores.addressDetail(),
                 updateStores.description());
+    }
+
+    @Transactional
+    public void deleteStores(Long storeId, AuthUser authUser) {
+        Store store = storeCommonService.getStores(storeId);
+        if (!authUser.getUserId().equals(store.getUser().getId())) {
+            throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_STORES_DELETE);
+        }
+
+        storeRepository.deleteById(storeId);
     }
 }

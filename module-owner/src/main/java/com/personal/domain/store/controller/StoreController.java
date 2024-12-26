@@ -59,4 +59,17 @@ public class StoreController {
                 .body(SuccessResponse.of(null));
     }
 
+    /**
+     * 매장 삭제
+     */
+    @DeleteMapping("/{storeId}")
+    public ResponseEntity<SuccessResponse<Void>> deleteStores(
+            @PathVariable Long storeId,
+            @AuthenticationPrincipal AuthUser authUser
+    ) {
+        storeService.deleteStores(storeId, authUser);
+
+        return ResponseEntity.ok()
+                .body(SuccessResponse.of(null));
+    }
 }
