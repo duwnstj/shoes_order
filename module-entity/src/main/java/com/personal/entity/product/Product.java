@@ -51,8 +51,8 @@ public class Product extends BaseEntity {
     private Store store;
 
     @Builder
-    public Product(Store store,ProductType type, String name, String category, String material, Long spacing, Long basePrice, Long customPrice, String description) {
-        this.store =store;
+    public Product(Store store, ProductType type, String name, String category, String material, Long spacing, Long basePrice, Long customPrice, String description) {
+        this.store = store;
         this.type = type;
         this.name = name;
         this.category = category;
@@ -63,4 +63,18 @@ public class Product extends BaseEntity {
         this.description = description;
 
     }
+
+    public void updateProducts(ProductType type, String name, String category, String material, Long spacing, Long basePrice, Long customPrice, String description) {
+        this.type = type;
+        this.name = name;
+        this.category = category;
+        this.material = material;
+        this.spacing = spacing;
+        this.basePrice = basePrice;
+        this.customPrice = customPrice;
+        this.description = description;
+
+    }
+
+
 }

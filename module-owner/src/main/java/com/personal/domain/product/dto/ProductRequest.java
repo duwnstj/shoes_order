@@ -6,7 +6,8 @@ import java.util.Objects;
 
 public sealed interface ProductRequest permits
         ProductRequest.GetProducts,
-        ProductRequest.AddProduct{
+        ProductRequest.AddProduct,
+        ProductRequest.UpdateProduct {
     record GetProducts(
             String type,
             String value,
@@ -31,7 +32,20 @@ public sealed interface ProductRequest permits
             String description
 
     )
-    implements ProductRequest{
+            implements ProductRequest {
 
+    }
+
+    record UpdateProduct(
+            ProductType type,
+            String name,
+            String category,
+            String material,
+            Long spacing,
+            Long basePrice,
+            Long customPrice,
+            String description
+    )
+            implements ProductRequest {
     }
 }
