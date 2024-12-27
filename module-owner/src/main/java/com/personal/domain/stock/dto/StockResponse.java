@@ -20,15 +20,6 @@ public sealed interface StockResponse permits
             LocalDateTime updatedAt
     )
             implements StockResponse {
-        private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        public String getFormattedCreateAt() {
-            return createAt.format(FORMATTER);
-        }
-
-        public String getFormattedUpdatedAt() {
-            return updatedAt.format(FORMATTER);
-        }
 
     }
 }
