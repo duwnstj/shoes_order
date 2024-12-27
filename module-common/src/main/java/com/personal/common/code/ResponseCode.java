@@ -28,6 +28,7 @@ public enum ResponseCode {
     FORBIDDEN_PRODUCTS_UPDATE("해당 상품 수정이 허용되지 않습니다."),
     FORBIDDEN_PRODUCTS_DELETE("해당 상품 삭제가 허용되지 않습니다."),
     FORBIDDEN_STORES_UPDATE("해당 가게 수정이 허용되지 않습니다."),
+    FORBIDDEN_STORES_USER("해당 가게 오너가 아닙니다."),
     FORBIDDEN_STORES_DELETE("해당 가게 삭제가 허용되지 않습니다."),
 
     //400
