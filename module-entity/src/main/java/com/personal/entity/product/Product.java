@@ -38,7 +38,7 @@ public class Product extends BaseEntity {
     private Long customPrice;
 
     @Column(nullable = false)
-    private boolean isSold = false;
+    private boolean isSold = true;
 
     @Column(nullable = false)
     private boolean isDeleted = false;
@@ -77,4 +77,7 @@ public class Product extends BaseEntity {
     }
 
 
+    public void updateIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 }

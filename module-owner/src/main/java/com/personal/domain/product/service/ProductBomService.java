@@ -136,6 +136,7 @@ public class ProductBomService {
         stockService.decreaseStock(productBom.getBaseProduct().getId(), productBom.getBaseQty());
 
 
+        //soft delete
         //BOM(생산계획) 삭제
         productBomRepository.deleteById(bomId);
 

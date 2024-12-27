@@ -20,36 +20,42 @@ public class ProductController {
 
     /**
      * 상품 다건 조회
+     * 해당 가게의 상품들(원자재,완제품)전부 조회
+     * 삭제되지 않은 상품들 조회
      *
      * @param getProducts
      * @return SuccessResponse
      */
     @GetMapping("/{storeId}/products")
     public ResponseEntity<SuccessResponse<Page<ProductResponse.Infos>>> getProducts(
-            @ModelAttribute ProductRequest.GetProducts getProducts
+            @ModelAttribute ProductRequest.GetProducts getProducts,
+            @PathVariable Long storeId
     ) {
         return ResponseEntity.ok()
-                .body(SuccessResponse.of(productService.getProducts(getProducts)));
+                .body(SuccessResponse.of(productService.getProducts(getProducts, storeId)));
 
     }
 
     /**
      * 상품 단일 조회
+     *
+     * @param storeId
+     * @param productId
+     * @return
      */
     @GetMapping("/{storeId}/products/{productId}")
     public ResponseEntity<SuccessResponse<ProductResponse.Info>> getProduct(
             @PathVariable Long storeId,
             @PathVariable Long productId
-    ){
+    ) {
         return ResponseEntity.ok()
-                .body(SuccessResponse.of(productService.getProduct(storeId,productId)));
+                .body(SuccessResponse.of(productService.getProduct(storeId, productId)));
     }
-
-
 
 
     /**
      * 상품 등록
+     *
      * @param addProduct
      * @return SuccessResponse
      */

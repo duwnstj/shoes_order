@@ -49,7 +49,7 @@ public class ProductBomController {
      * @param authUser
      * @return
      */
-    @PatchMapping("{storeId}/products/{productId}/bom{bomId}")
+    @PatchMapping("{storeId}/products/{productId}/bom/{bomId}")
     public ResponseEntity<SuccessResponse<Void>> updateBom(
             @RequestBody ProductBomRequest.UpdateBom updateBom,
             @PathVariable Long storeId,

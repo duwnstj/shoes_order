@@ -4,6 +4,7 @@ import com.personal.common.code.ResponseCode;
 import com.personal.common.entity.AuthUser;
 import com.personal.domain.product.dto.ProductRequest;
 import com.personal.domain.product.dto.ProductResponse;
+import com.personal.domain.product.exception.NotFoundProductException;
 import com.personal.domain.product.repository.ProductRepository;
 import com.personal.domain.store.exception.StoreOwnerMismatchException;
 import com.personal.domain.store.service.StoreCommonService;
@@ -26,13 +27,18 @@ public class ProductService {
     private final StoreCommonService storeCommonService;
     private final ProductCommonService productCommonService;
 
-    public Page<ProductResponse.Infos> getProducts(ProductRequest.GetProducts getProducts) {
+    public Page<ProductResponse.Infos> getProducts(ProductRequest.GetProducts getProducts, Long storeId) {
         Pageable pageable = PageRequest.of(getProducts.page() - 1, getProducts.size());
-        return productRepository.getProducts(getProducts, pageable);
+
+        return productRepository.getProducts(getProducts, pageable,storeId);
     }
 
     public ProductResponse.Info getProduct(Long storeId, Long productId) {
         Product product = productRepository.getProduct(storeId, productId);
+        if (product.isDeleted()) {
+            throw new NotFoundProductException(ResponseCode.NOT_FOUND_PRODUCT);
+        }
+
         return new ProductResponse.Info(
                 product.getId(),
                 product.getType(),
@@ -93,7 +99,8 @@ public class ProductService {
         if (!authUser.getUserId().equals(store.getUser().getId())) {
             throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_PRODUCTS_DELETE);
         }
-        productRepository.deleteById(productId);
+        Product product = productCommonService.getProducts(productId);
+        product.updateIsDeleted(true);
     }
 
 

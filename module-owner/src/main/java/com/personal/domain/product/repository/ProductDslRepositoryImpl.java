@@ -2,11 +2,8 @@ package com.personal.domain.product.repository;
 
 import com.personal.domain.product.dto.ProductRequest;
 import com.personal.domain.product.dto.ProductResponse;
-import com.personal.entity.product.ProductType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static com.personal.entity.product.QProduct.product;
-import static com.personal.entity.store.QStore.store;
 
 @RequiredArgsConstructor
 public class ProductDslRepositoryImpl implements ProductDslRepository {
@@ -24,15 +20,8 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<ProductResponse.Infos> getProducts(ProductRequest.GetProducts getProducts, Pageable pageable) {
-
-        JPQLQuery<Long> productCount = JPAExpressions
-                .select(product.count())
-                .from(product)
-                .where(product.store.id.eq(store.id),
-                        product.type.eq(ProductType.PRODUCT),
-                        product.isDeleted.eq(false),
-                        product.isSold.eq(true));
+    public Page<ProductResponse.Infos> getProducts(ProductRequest.GetProducts getProducts, Pageable pageable, Long storeId) {
+        // 메인쿼리: 조건을 모두 처리하고 페이징 처리
         List<ProductResponse.Infos> results = queryFactory
                 .select(Projections.constructor(ProductResponse.Infos.class,
                         product.id,
@@ -42,30 +31,31 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
                         product.material,
                         product.basePrice,
                         product.customPrice,
-                        productCount
+                        product.store.id
                 ))
                 .from(product)
-                .where(searchProducts(getProducts.type(), getProducts.value()),
-                        product.isDeleted.eq(false)
+                .where(
+                        product.store.id.eq(storeId),
+                        product.isDeleted.eq(false),
+                        searchProducts(getProducts.type(), getProducts.value()),
+                        applyIsSoldCondition(getProducts.isSold())
                 )
                 .orderBy(getProducts.sort().equals("ASC") ? product.updatedAt.asc() : product.updatedAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
+        // 총 개수 계산
         Long totalCount = queryFactory
                 .select(product.count())
                 .from(product)
                 .where(
+                        product.store.id.eq(storeId),
+                        product.isDeleted.eq(false),
                         searchProducts(getProducts.type(), getProducts.value()),
-                        product.isDeleted.eq(false)
+                        applyIsSoldCondition(getProducts.isSold())
                 )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetchOne();
         return new PageImpl<>(results, pageable, totalCount);
-
-
     }
 
     private BooleanExpression searchProducts(String type, String value) {
@@ -75,6 +65,10 @@ public class ProductDslRepositoryImpl implements ProductDslRepository {
             case "category" -> value != null ? product.category.contains(value) : null;
             default -> null;
         };
+    }
+
+    private BooleanExpression applyIsSoldCondition(Boolean isSold) {
+        return isSold != null ? product.isSold.eq(isSold) : null;
     }
 
 }

@@ -14,7 +14,7 @@ public sealed interface ProductResponse permits
             String material,
             Long basePrice,
             Long customPrice,
-            Long productCount
+            Long storeId
 
 
     ) implements ProductResponse {

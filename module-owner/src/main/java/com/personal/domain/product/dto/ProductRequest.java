@@ -11,6 +11,7 @@ public sealed interface ProductRequest permits
     record GetProducts(
             String type,
             String value,
+            Boolean isSold,
             String sort,
             Integer page,
             Integer size
