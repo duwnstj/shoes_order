@@ -50,17 +50,6 @@ public class ProductBomService {
                 .build();
         productBomRepository.save(productBom);
 
-        //재고 차감 로직
-        adjustStockForBom(baseProduct, materialProduct, createBom.baseProductQty(), createBom.materialProductQty());
-
-    }
-
-    private void adjustStockForBom(Product baseProduct, Product materialProduct, Long baseQty, Long materialQty) {
-        // 원자재 재고 차감
-        stockService.decreaseStock(materialProduct.getId(), materialQty);
-
-        // 완제품 재고 추가
-        stockService.increaseStock(baseProduct.getId(), baseQty);
     }
 
 
@@ -87,20 +76,6 @@ public class ProductBomService {
                 materialProduct,
                 updateBom.materialProductQty()
         );
-        adjustStockForUpdate(productBom.getBaseProduct(), productBom.getMaterialProduct(),
-                previusBaseQty, productBom.getBaseQty(),
-                previusMaterialQty, productBom.getMaterialQty());
-    }
-
-    public void adjustStockForUpdate(Product baseProduct, Product materialProduct,
-                                     Long previusBaseQty, Long newBaseQty,
-                                     Long previusMaterialQty, Long newMaterialQty) {
-
-        //원자재 재고 조정
-        stockService.decreaseStock(materialProduct.getId(), newMaterialQty - previusMaterialQty);
-        //완제품 재고 조정
-        stockService.increaseStock(baseProduct.getId(), newBaseQty - previusBaseQty);
-
     }
 
     public List<ProductBomResponse.GetInfos> getBoms(Long storeId, Long productId) {
@@ -128,16 +103,7 @@ public class ProductBomService {
         }
         productCommonService.getProducts(productId);
 
-        //Bom 조회
-        ProductBom productBom = productBomCommonService.getBoms(bomId);
 
-        //재고 복구
-        stockService.increaseStock(productBom.getMaterialProduct().getId(), productBom.getMaterialQty());
-        stockService.decreaseStock(productBom.getBaseProduct().getId(), productBom.getBaseQty());
-
-
-        //soft delete
-        //BOM(생산계획) 삭제
         productBomRepository.deleteById(bomId);
 
 

@@ -30,6 +30,7 @@ public class ProductBom {
     @Column(nullable = false)
     private Long materialQty;
 
+
     @Builder
     public ProductBom(Product baseProduct, Long baseQty, Product materialProduct, Long materialQty) {
         this.baseProduct = baseProduct;
@@ -44,5 +45,8 @@ public class ProductBom {
         this.baseQty = baseQty;
         this.materialProduct = materialProduct;
         this.materialQty = materialQty;
+    }
+
+    public void updateIsdeleted() {
     }
 }
