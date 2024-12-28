@@ -4,12 +4,15 @@ import com.personal.common.entity.BaseEntity;
 import com.personal.entity.store.Store;
 import com.personal.entity.user.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "orders")
 public class Orders extends BaseEntity {
     @Id
@@ -17,7 +20,7 @@ public class Orders extends BaseEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private Long orderNo;
+    private String orderNo;
 
     @Column(nullable = false)
     private LocalDate orderDate;
@@ -60,4 +63,37 @@ public class Orders extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
+
+    @Builder
+    public Orders(
+            String orderNo ,
+            LocalDate orderDate ,
+            String recipi ,
+            String tel,
+            String request,
+            OrderStatus orderStatus,
+            String paymentMethod,
+            Long totalAmt,
+            Long totalTax,
+            String zip,
+            String address,
+            String addressDetail,
+            User user,
+            Store store
+            ) {
+        this.orderNo = orderNo;
+        this.orderDate = orderDate;
+        this.recipi = recipi;
+        this.tel = tel;
+        this.request = request;
+        this.orderStatus = orderStatus;
+        this.paymentMethod = paymentMethod;
+        this.totalAmt = totalAmt;
+        this.totalTax = totalTax;
+        this.zip = zip;
+        this.address = address;
+        this.addressDetail = addressDetail;
+        this.user = user;
+        this.store = store;
+    }
 }

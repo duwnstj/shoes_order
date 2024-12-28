@@ -20,6 +20,9 @@ public class StoreController {
 
     private final StoreService storeService;
 
+    /**
+     * 매장 다건 조회
+     * */
     @GetMapping
     public ResponseEntity<SuccessResponse<Page<StoreResponse.Infos>>> getStores(
             @ModelAttribute StoreRequest.GetStores getStores
@@ -27,6 +30,9 @@ public class StoreController {
         return ResponseEntity.ok().body(SuccessResponse.of(storeService.getStores(getStores)));
     }
 
+    /**
+     * 매장 단건 조회
+     * */
     @GetMapping("/{storeId}")
     public ResponseEntity<SuccessResponse<StoreResponse.Info>> getStore(
             @PathVariable Long storeId
