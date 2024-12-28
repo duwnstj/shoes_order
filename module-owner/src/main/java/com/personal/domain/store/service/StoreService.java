@@ -71,6 +71,6 @@ public class StoreService {
             throw new StoreOwnerMismatchException(ResponseCode.FORBIDDEN_STORES_DELETE);
         }
 
-        storeRepository.deleteById(storeId);
+        store.updateIsDeleted(true);
     }
 }

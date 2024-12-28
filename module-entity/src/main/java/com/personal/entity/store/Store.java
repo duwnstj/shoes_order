@@ -59,4 +59,8 @@ public class Store extends BaseEntity {
         this.addressDetail = addressDetail;
         this.description = description;
     }
+
+    public void updateIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 }
