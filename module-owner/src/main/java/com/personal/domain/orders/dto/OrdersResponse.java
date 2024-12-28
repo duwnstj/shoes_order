@@ -1,18 +1,19 @@
-package com.personal.domain.orderdetail.dto;
+package com.personal.domain.orders.dto;
 
 import com.personal.entity.order.OrderStatus;
 
 import java.time.LocalDate;
+import java.util.List;
 
-public sealed interface OrderDetailResponse permits
-        OrderDetailResponse.GetInfos {
-    record GetInfos(
-            //orders
-            Long storeProductCnt,
+public sealed interface OrdersResponse permits
+            OrdersResponse.OrdersInfo ,
+            OrdersResponse.OrdersDetailInfo
+{
+    record OrdersInfo (
             Long orderId,
             Long storeId,
             String storeName,
-            Long orderNo,
+            String orderNo,
             LocalDate orderDate,
             String recipi,
             String tel,
@@ -24,18 +25,21 @@ public sealed interface OrderDetailResponse permits
             String zip,
             String address,
             String addressDetail,
-            //ordersDetail
+            List<OrdersDetailInfo> ordersDetails
+    ) implements OrdersResponse {
+    }
+
+    record OrdersDetailInfo(
             Long productId,
             String productName,
             Long length,
             Long width,
             Long qty,
-            Boolean customYN,
+            Boolean customyn,
             Long customPrice,
             Long basePrice,
             Long amt,
             Long tax
-
-    ) implements OrderDetailResponse {
+    ) implements OrdersResponse {
     }
 }
