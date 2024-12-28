@@ -19,6 +19,7 @@ public class ShippingStatusController {
 
     /**
      * 배송 현황 조회
+     *
      * @param storeId
      * @param getShippingStatus
      * @param authUser
@@ -31,7 +32,24 @@ public class ShippingStatusController {
             @AuthenticationPrincipal AuthUser authUser
     ) {
         return ResponseEntity.ok()
-                .body(SuccessResponse.of(shippingStatusService.getShippingStatus(storeId,getShippingStatus,authUser)));
+                .body(SuccessResponse.of(shippingStatusService.getShippingStatus(storeId, getShippingStatus, authUser)));
 
+    }
+
+    /**
+     * 주문 상태 변경
+     *
+     * @param storeId
+     * @return
+     */
+    @PostMapping("/{storeId}/shipping/{shippingId}")
+    public ResponseEntity<SuccessResponse<Void>> updateShippingStatus(
+            @PathVariable Long storeId,
+            @PathVariable Long shippingId
+    ) {
+        shippingStatusService.updateShippingStatus(storeId, shippingId);
+
+        return ResponseEntity.ok()
+                .body(SuccessResponse.of(null));
     }
 }

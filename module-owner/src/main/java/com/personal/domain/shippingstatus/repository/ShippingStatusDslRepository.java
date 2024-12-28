@@ -1,6 +1,5 @@
 package com.personal.domain.shippingstatus.repository;
 
-import com.personal.common.entity.SuccessResponse;
 import com.personal.domain.shippingstatus.dto.ShippingStatusRequest;
 import com.personal.domain.shippingstatus.dto.ShippingStatusResponse;
 import org.springframework.data.domain.Page;

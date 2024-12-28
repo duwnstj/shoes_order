@@ -5,6 +5,8 @@ import com.personal.domain.shippingstatus.dto.ShippingStatusRequest;
 import com.personal.domain.shippingstatus.dto.ShippingStatusResponse;
 import com.personal.domain.shippingstatus.repository.ShippingStatusRepository;
 import com.personal.domain.store.service.StoreCommonService;
+import com.personal.entity.ship.ShipStatus;
+import com.personal.entity.ship.ShippingStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShippingStatusService {
     private final ShippingStatusRepository shippingStatusRepository;
     private final StoreCommonService storeCommonService;
+    private final ShippingStatusCommonService shippingStatusCommonService;
 
     public Page<ShippingStatusResponse.Infos> getShippingStatus(Long storeId, ShippingStatusRequest.GetShippingStatus getShippingStatus, AuthUser authUser) {
         Pageable pageable = PageRequest.of(getShippingStatus.page() - 1, getShippingStatus.size());
@@ -26,6 +29,15 @@ public class ShippingStatusService {
 
         return shippingStatusRepository.getShippingStatus(pageable, getShippingStatus);
 
+
+    }
+
+    @Transactional
+    public void updateShippingStatus(Long storeId, Long shippingId) {
+        storeCommonService.getStores(storeId);
+        ShippingStatus shippingStatus = shippingStatusCommonService.getShipping(shippingId);
+
+        shippingStatus.updateStatus(ShipStatus.DELIVERED);
 
     }
 }
