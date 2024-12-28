@@ -1,6 +1,7 @@
 package com.personal.domain.review.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public sealed interface ReviewResponse permits
@@ -12,8 +13,8 @@ public sealed interface ReviewResponse permits
             String title,
             List<ImageInfo> imageInfos,
             String content,
-            LocalDate startDate,
-            LocalDate endDate
+            LocalDate createdAt,
+            LocalDate updatedAt
 
 
     )

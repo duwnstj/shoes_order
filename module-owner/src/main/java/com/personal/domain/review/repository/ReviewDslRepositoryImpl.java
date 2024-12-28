@@ -57,7 +57,7 @@ public class ReviewDslRepositoryImpl implements ReviewDslRepository {
                         reviewImagesMap.getOrDefault(r.getId(), Collections.emptyList()),
                         r.getContent(),
                         r.getCreatedAt().toLocalDate(),
-                        r.getCreatedAt().toLocalDate()
+                        r.getUpdatedAt().toLocalDate()
                 )).toList();
     }
 
