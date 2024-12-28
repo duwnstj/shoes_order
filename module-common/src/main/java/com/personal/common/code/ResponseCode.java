@@ -41,6 +41,7 @@ public enum ResponseCode {
     NOT_FOUND_PRODUCTBOM("상품 BOM을 찾을 수 없습니다."),
     NOT_FOUND_STOCK("재고를 찾을 수 없습니다."),
     NOT_FOUND_STORE("매장을 찾을 수 없습니다."),
+    NOT_FOUND_ORDER("주문을 찾을 수 없습니다."),
 
     //500
     ILLEGAL_LOT("lot가 중복됩니다.");
