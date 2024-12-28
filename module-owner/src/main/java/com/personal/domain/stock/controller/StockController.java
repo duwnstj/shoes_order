@@ -18,8 +18,9 @@ public class StockController {
     private final StockService stockService;
 
     /**
-     * 가게 아이디에 해당하는 재고 모두 조회(원자재,완제품)
-     *
+     * 가게 아이디에 해당하는 재고 모두 조회
+     * (원자재,완제품 선택 가능)
+     * (정렬 기준 선택 가능)
      * @param storeId
      * @param getStocks
      * @param authUser
@@ -33,7 +34,7 @@ public class StockController {
     ) {
 
         return ResponseEntity.ok()
-                .body(SuccessResponse.of(stockService.getStocks(storeId,getStocks,authUser)));
+                .body(SuccessResponse.of(stockService.getStocks(storeId, getStocks, authUser)));
 
     }
 }

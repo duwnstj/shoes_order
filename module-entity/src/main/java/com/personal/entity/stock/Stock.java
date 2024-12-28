@@ -6,6 +6,7 @@ import com.personal.entity.product.Product;
 import com.personal.entity.product.ProductType;
 import com.personal.entity.store.Store;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -44,13 +45,16 @@ public class Stock extends BaseEntity {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public void increase(Long baseQty) {
+    @Builder
+    public Stock(ProductType type, Long size, Long qty, Long price, String lot, String description, Store store, Product product) {
+        this.type = type;
+        this.size = size;
+        this.qty = qty;
+        this.price = price;
+        this.lot = lot;
+        this.description = description;
+        this.store = store;
+        this.product = product;
 
-        this.qty += baseQty;
-    }
-
-    public void decrease(Long decreaseQty) {
-
-        this.qty -= decreaseQty;
     }
 }
