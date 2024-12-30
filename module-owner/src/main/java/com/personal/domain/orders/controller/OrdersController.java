@@ -47,5 +47,14 @@ public class OrdersController {
     /**
      * 주문 취소(생산되고 있는 시점에서는 취소 불가능)
      * */
+    @PostMapping("/{orderId}/cancel")
+    public ResponseEntity<SuccessResponse<Void>> orderCancel(
+            @AuthenticationPrincipal AuthUser authUser,
+            @PathVariable Long storeId,
+            @PathVariable Long orderId
+    ) {
+        ordersService.orderCancel(authUser, storeId , orderId);
+        return ResponseEntity.ok().body(SuccessResponse.of(null));
+    }
 
 }

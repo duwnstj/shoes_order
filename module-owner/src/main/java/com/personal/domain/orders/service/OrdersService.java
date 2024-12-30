@@ -44,6 +44,18 @@ public class OrdersService {
         ordersRepository.save(orders);
     }
 
+    @Transactional
+    public void orderCancel(AuthUser authUser , Long storeId , Long orderId) {
+        Orders orders = ordersRepository.findByOrderIdAndStoreIdAndUserId(orderId , storeId , authUser.getUserId());
+
+        switch (orders.getOrderStatus()) {
+            case PENDING, APPROVED -> orders.updateStatus(OrderStatus.CANCELLED);
+            default -> throw new BadRequestException(ResponseCode.INVALID_ORDER_ACCESS);
+        }
+
+        ordersRepository.save(orders);
+    }
+
     private void apply(Orders orders) {
         // 승인 로직
 
