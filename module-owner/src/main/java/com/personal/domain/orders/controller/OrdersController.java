@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class OrdersController {
     private final OrdersService ordersService;
 
+    /**
+     * 주문 조회
+     * */
     @GetMapping
     public ResponseEntity<SuccessResponse<Page<OrdersResponse.OrdersInfo>>> getOrders(
             @AuthenticationPrincipal AuthUser authUser,
@@ -27,4 +30,22 @@ public class OrdersController {
     ) {
         return ResponseEntity.ok().body(SuccessResponse.of(ordersService.getOrders(authUser, storeId, getOrders)));
     }
+
+    /**
+     * 주문 상태 변경
+     * */
+    @PostMapping("/{orderId}")
+    public ResponseEntity<SuccessResponse<Void>> orderStatusChange(
+            @AuthenticationPrincipal AuthUser authUser,
+            @PathVariable Long storeId,
+            @PathVariable Long orderId
+    ) {
+        ordersService.orderStatusChange(authUser, storeId, orderId);
+        return ResponseEntity.ok().body(SuccessResponse.of(null));
+    }
+
+    /**
+     * 주문 취소(생산되고 있는 시점에서는 취소 불가능)
+     * */
+
 }

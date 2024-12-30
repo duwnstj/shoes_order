@@ -1,11 +1,15 @@
 package com.personal.entity.store;
 
 import com.personal.common.entity.BaseEntity;
+import com.personal.entity.order.Orders;
 import com.personal.entity.user.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -39,6 +43,9 @@ public class Store extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "store" , cascade = CascadeType.REMOVE , orphanRemoval = true)
+    private List<Orders> orders = new ArrayList<>();
 
     @Builder
     public Store(String name, String tel, String zip, String address, String addressDetail, String description, User user) {
