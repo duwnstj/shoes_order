@@ -2,11 +2,13 @@ package com.personal.domain.product.controller;
 
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
+import com.personal.common.enums.UserRole;
 import com.personal.domain.product.dto.ProductBomRequest;
 import com.personal.domain.product.dto.ProductBomResponse;
 import com.personal.domain.product.service.ProductBomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("api/v1/stores")
+@Secured({UserRole.Authority.OWNER})
 @RestController
 public class ProductBomController {
     private final ProductBomService productBomService;

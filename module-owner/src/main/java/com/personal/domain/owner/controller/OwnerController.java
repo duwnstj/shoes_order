@@ -2,12 +2,14 @@ package com.personal.domain.owner.controller;
 
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
+import com.personal.common.enums.UserRole;
 import com.personal.domain.owner.dto.OwnerRequest;
 import com.personal.domain.owner.dto.OwnerResponse;
 import com.personal.domain.owner.service.OwnerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RequestMapping("api/v1/users")
 @RestController
+@Secured({UserRole.Authority.OWNER})
 @RequiredArgsConstructor
 public class OwnerController {
     private final OwnerService ownerService;

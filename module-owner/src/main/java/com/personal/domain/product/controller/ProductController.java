@@ -2,6 +2,7 @@ package com.personal.domain.product.controller;
 
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
+import com.personal.common.enums.UserRole;
 import com.personal.domain.product.dto.ProductRequest;
 import com.personal.domain.product.dto.ProductResponse;
 import com.personal.domain.product.service.ProductService;
@@ -9,11 +10,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/stores")
+@Secured({UserRole.Authority.OWNER})
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;

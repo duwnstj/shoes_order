@@ -2,12 +2,14 @@ package com.personal.domain.user.controller;
 
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
+import com.personal.common.enums.UserRole;
 import com.personal.domain.user.dto.UserRequest;
 import com.personal.domain.user.dto.UserResponse;
 import com.personal.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
+@Secured({UserRole.Authority.USER})
 @RestController
 public class UserController {
 

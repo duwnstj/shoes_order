@@ -2,18 +2,21 @@ package com.personal.domain.stock.controller;
 
 import com.personal.common.entity.AuthUser;
 import com.personal.common.entity.SuccessResponse;
+import com.personal.common.enums.UserRole;
 import com.personal.domain.stock.dto.StockRequest;
 import com.personal.domain.stock.dto.StockResponse;
 import com.personal.domain.stock.service.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/stores")
+@Secured({UserRole.Authority.OWNER})
 public class StockController {
     private final StockService stockService;
 
