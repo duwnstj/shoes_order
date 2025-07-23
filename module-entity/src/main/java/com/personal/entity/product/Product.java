@@ -10,7 +10,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "product")
+@Table(name = "product",
+        indexes = {
+                @Index(name = "idx_storeId_updatedAt", columnList = "store_id,updated_at")
+        })
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

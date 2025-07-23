@@ -12,6 +12,7 @@ import com.personal.entity.product.Product;
 import com.personal.entity.store.Store;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,14 @@ public class ProductService {
     private final StoreCommonService storeCommonService;
     private final ProductCommonService productCommonService;
 
+    @Cacheable(
+            value = "products",
+            key = "T(String).valueOf('store:').concat(#storeId)" +
+                    ".concat(':name:').concat(#name != null ? #name : 'ALL')" +
+                    ".concat(':isSold:').concat(#isSold != null ? #isSold : 'ALL')" +
+                    ".concat(':category:').concat(#category != null ? #category : 'ALL')",
+            unless = "#result == null || #result.isEmpty()"
+    )
     public Page<ProductResponse.Infos> getProducts(ProductRequest.GetProducts getProducts, Long storeId) {
         Pageable pageable = PageRequest.of(getProducts.page() - 1, getProducts.size());
 
