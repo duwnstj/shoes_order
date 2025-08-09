@@ -57,6 +57,8 @@ Spring Boot 기반으로 설계되어, **JWT 인증·인가**, **QueryDSL 검색
 ## API 명세서
 https://docs.google.com/spreadsheets/d/1b5iGXahXOZmBTQjV2DNz_VW-AXxTf6kSyKtmz1QUZSE/edit?gid=0#gid=0
 
+---
+
 ## ERD
 <img width="1400" height="822" alt="image" src="https://github.com/user-attachments/assets/54d2e6ed-2779-47dd-bb61-1ffcaa839e56" />
 
