@@ -1,0 +1,17 @@
+# ===== 빌드 스테이지 =====
+FROM eclipse-temurin:17-jdk AS builder
+WORKDIR /app
+COPY . .
+RUN ./gradlew :module-owner:build -x test
+# ===== 실행 스테이지 =====
+FROM eclipse-temurin:17-jre
+
+RUN useradd -r -u 1001 appuser
+
+WORKDIR /app
+COPY --from=builder /app/module-owner/build/libs/*.jar app.jar
+
+USER appuser
+
+EXPOSE 8080
+CMD ["java", "-jar", "app.jar"]
